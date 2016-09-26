@@ -10,6 +10,8 @@
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="0dp"
         android:layout_alignParentTop="true"
+        android:clickable="true"
+        android:focusableInTouchMode="true"
         android:layout_marginTop="33dp">
 
         <TextView
@@ -30,7 +32,9 @@
             android:layout_marginBottom="121dp"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:hint="Please choose your room number" />
+            android:hint="Please choose your room number"
+            android:singleLine="true"
+            android:imeOptions="actionDone"/>
 
         <Button
             android:layout_width="wrap_content"

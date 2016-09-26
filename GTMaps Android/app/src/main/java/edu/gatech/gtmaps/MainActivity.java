@@ -1,9 +1,13 @@
 package edu.gatech.gtmaps;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
@@ -21,7 +25,21 @@ public class MainActivity extends AppCompatActivity {
         AutoCompleteTextView textView = (AutoCompleteTextView)
                 findViewById(R.id.Building_Choice);
         textView.setAdapter(adapter);
-
+        textView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                in.hideSoftInputFromWindow(arg1.getApplicationWindowToken(), 0);
+            }
+        });
+        textView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    hideKeyboard(v);
+                }
+            }
+        });
         ImageView iv = (ImageView)findViewById(R.id.logoiv);
         iv.setImageResource(R.drawable.gtmaps);
     }
@@ -36,6 +54,11 @@ public class MainActivity extends AppCompatActivity {
         String message = text.getText().toString();
         intent.putExtra("building", message);
         startActivity(intent);
+    }
+
+    public void hideKeyboard(View view) {
+        InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }
 
