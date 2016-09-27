@@ -1,4 +1,4 @@
-package edu.gatech.gtmaps;
+package edu.gatech.gtmaps.models;
 
 import java.util.List;
 
@@ -45,21 +45,25 @@ public class Hall {
     public String toString() {
         String hallStr = "Hallway ";
 
-        if (name == null) {
-            hallStr += "containing rooms ";
-            for (Room room : roomsA) {
-                hallStr += room.toString() + ", ";
-            }
-            hallStr.substring(0, hallStr.length() - 2);
-            hallStr += " and ";
-
-            for (Room room : roomsB) {
-                hallStr += room.toString() + ", ";
-            }
-            hallStr.substring(0, hallStr.length() - 2);
-        } else {
-            hallStr += name;
+        if (name != null) {
+            hallStr += String.format("%s: ",name);
         }
+
+        hallStr += "contains rooms ";
+
+        //vStringify rooms on side A of the hallway
+        for (Room room : roomsA) {
+            hallStr += room.toString() + ", ";
+        }
+        hallStr = hallStr.substring(0, hallStr.length() - 2); //omit extra comma and space
+
+        hallStr += " and ";
+
+        // Stringify rooms on side B of the hallway
+        for (Room room : roomsB) {
+            hallStr += room.toString() + ", ";
+        }
+        hallStr = hallStr.substring(0, hallStr.length() - 2); //omit extra comma and space
 
         return hallStr;
     }

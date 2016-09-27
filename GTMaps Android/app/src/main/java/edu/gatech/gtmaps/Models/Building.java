@@ -1,4 +1,4 @@
-package edu.gatech.gtmaps;
+package edu.gatech.gtmaps.models;
 
 import java.util.List;
 
@@ -24,6 +24,10 @@ public abstract class Building {
 
     public List<Room> getRooms() {
         return rooms;
+    }
+
+    public String toString() {
+        return name;
     }
 
 }

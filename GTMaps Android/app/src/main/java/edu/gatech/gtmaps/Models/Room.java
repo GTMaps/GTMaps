@@ -1,15 +1,15 @@
-package edu.gatech.gtmaps;
+package edu.gatech.gtmaps.models;
 
 public class Room {
 
-    private String number;
     private Building building;
     private Hall hall; // not in the python file. might be necessary???
+    private String number;
 
     public Room(String number, Building building, Hall hall) {
-        this.number = number;
         this.building = building;
         this.hall = hall;
+        this.number = number;
     }
 
     public String getNumber() {
@@ -26,8 +26,9 @@ public class Room {
 
     public boolean equals(Object other) {
         if (other instanceof Room) {
-            Room room = (Room) other;
-            return building.equals(room.getBuilding()) && number.equals(room.getNumber());
+            Room other_room = (Room) other;
+            return building.equals(other_room.getBuilding())
+                    && number.equals(other_room.getNumber());
         }
         return false;
     }
