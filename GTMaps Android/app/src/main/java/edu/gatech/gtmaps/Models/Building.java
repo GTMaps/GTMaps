@@ -1,4 +1,4 @@
-package edu.gatech.gtmaps.Models;
+package edu.gatech.gtmaps.models;
 
 import java.util.List;
 
