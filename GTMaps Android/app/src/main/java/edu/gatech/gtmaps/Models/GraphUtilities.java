@@ -1,4 +1,4 @@
-package edu.gatech.gtmaps.Models;
+package edu.gatech.gtmaps.models;
 
 /**
  * Created by yingqiongshi on 9/27/16.
