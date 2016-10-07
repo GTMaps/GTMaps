@@ -1,8 +1,8 @@
 package edu.gatech.gtmaps;
 
 import java.util.LinkedList;
-import edu.gatech.gtmaps.Models.Building;
-import edu.gatech.gtmaps.Models.Room;
+import edu.gatech.gtmaps.models.Building;
+import edu.gatech.gtmaps.models.Room;
 
 /**
  * Singleton search object for the application
