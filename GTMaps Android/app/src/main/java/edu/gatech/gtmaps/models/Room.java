@@ -1,6 +1,6 @@
 package edu.gatech.gtmaps.models;
 
-public class Room {
+public class Room implements BuildingSpace {
 
     private Building building;
     private Hall hall; // not in the python file. might be necessary???
@@ -32,6 +32,8 @@ public class Room {
         }
         return false;
     }
+
+    public String getName() {return number;}
 
     public String toString() {
         return "Room number: " + number;

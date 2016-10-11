@@ -2,7 +2,7 @@ package edu.gatech.gtmaps.models;
 
 import java.util.List;
 
-public class Hall {
+public class Hall implements BuildingSpace{
 
     private String name;
     private List<Room> roomsA;
