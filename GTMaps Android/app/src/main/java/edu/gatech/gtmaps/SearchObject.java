@@ -1,7 +1,7 @@
 package edu.gatech.gtmaps;
 
 import java.util.LinkedList;
-import edu.gatech.gtmaps.models.Building;
+import edu.gatech.gtmaps.models.BuildingSpace;
 import edu.gatech.gtmaps.models.Room;
 import edu.gatech.gtmaps.models.Hall;
 
@@ -19,15 +19,32 @@ public class SearchObject {
     private SearchObject() {
     }
 
-    public LinkedList<Room> find(String roomNumber, Building b) {
-        LinkedList<Room> ret = new LinkedList();
+    /**
+     * Performs breadth first search (to be adapted to Greedy Best-First across all the halls/rooms
+     * to find target room.
+     * @param target The desired room to navigate to.
+     * @param start The starting hallway.
+     * @return LinkedList of building spaces to navigate from start ot target.
+     */
+    public LinkedList<BuildingSpace> find(Room target, BuildingSpace start) {
+        //Initialize datastructres/loop variables
+        LinkedList<BuildingSpace> ret = new LinkedList<>();
+        LinkedList<BuildingSpace> visited = new LinkedList<>();
+        boolean found = false;
+        Node currNode = new Node(start, null);
+
+        while (!found) {
+            if (currNode.h == start) {
+                found = true;
+            }
+        }
         return ret;
     }
 
     private class Node {
-        private Hall h;
-        private Hall p;
-        private Node(Hall thisHallway, Hall previousHallway) {
+        private BuildingSpace h;
+        private BuildingSpace p;
+        private Node(BuildingSpace thisHallway, BuildingSpace previousHallway) {
             h = thisHallway;
             p = previousHallway;
         }
