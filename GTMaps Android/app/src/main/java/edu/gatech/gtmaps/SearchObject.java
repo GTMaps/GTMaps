@@ -1,7 +1,10 @@
 package edu.gatech.gtmaps;
 
 import java.util.LinkedList;
+import java.util.List;
+
 import edu.gatech.gtmaps.models.BuildingSpace;
+import edu.gatech.gtmaps.models.Junction;
 import edu.gatech.gtmaps.models.Room;
 import edu.gatech.gtmaps.models.Hall;
 
@@ -30,11 +33,34 @@ public class SearchObject {
         //Initialize datastructres/loop variables
         LinkedList<BuildingSpace> ret = new LinkedList<>();
         LinkedList<BuildingSpace> visited = new LinkedList<>();
+        LinkedList<Node> struc = new LinkedList<>();
         boolean found = false;
         Node currNode = new Node(start, null);
 
         while (!found) {
-            if (currNode.h == start) {
+            visited.add(currNode.h);
+
+            for (Junction j :( (Hall) currNode.h).getJunctions()) {
+                List<Hall> halls = j.getHalls();
+                for (int i = 0; i < halls.size(); i++) {
+                    if (halls.get(i) != currNode.h) {
+                        struc.push(new Node(halls.get(i), currNode));
+                    }
+                }
+            }
+
+            if (!struc.isEmpty()) {
+                Node next = struc.pop();
+                while (visited.contains(next.h) & !struc.isEmpty()) {
+                    next = struc.pop();
+                    currNode = next;
+                }
+            }
+            else {
+                visited = new LinkedList<>();
+            }
+
+            if (((Hall) currNode.h).getRoomsA().contains(target) || ((Hall) currNode.h).getRoomsB().contains(target)) {
                 found = true;
             }
         }
@@ -43,8 +69,8 @@ public class SearchObject {
 
     private class Node {
         private BuildingSpace h;
-        private BuildingSpace p;
-        private Node(BuildingSpace thisHallway, BuildingSpace previousHallway) {
+        Node p;
+        private Node(BuildingSpace thisHallway, Node previousHallway) {
             h = thisHallway;
             p = previousHallway;
         }
