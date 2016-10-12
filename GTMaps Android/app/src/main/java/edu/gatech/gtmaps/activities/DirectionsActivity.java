@@ -1,10 +1,12 @@
-package edu.gatech.gtmaps;
+package edu.gatech.gtmaps.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import edu.gatech.gtmaps.R;
 
 public class DirectionsActivity extends AppCompatActivity {
     public String message;

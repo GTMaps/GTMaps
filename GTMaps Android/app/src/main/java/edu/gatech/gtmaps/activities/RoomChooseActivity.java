@@ -1,4 +1,4 @@
-package edu.gatech.gtmaps;
+package edu.gatech.gtmaps.activities;
 
 import android.app.Activity;
 import android.content.Context;
@@ -13,18 +13,33 @@ import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+import edu.gatech.gtmaps.R;
 
+public class RoomChooseActivity extends AppCompatActivity {
+public String message;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.room_choose);
+        Intent intent = getIntent();
+
+        message = intent.getStringExtra("building");
+        TextView text = (TextView) findViewById(R.id.building_text);
+        text.setText(message);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_dropdown_item_1line, BUILDINGS);
+                android.R.layout.simple_dropdown_item_1line, ROOMS);
         AutoCompleteTextView textView = (AutoCompleteTextView)
-                findViewById(R.id.Building_Choice);
+                findViewById(R.id.room_choice);
         textView.setAdapter(adapter);
+        textView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                in.hideSoftInputFromWindow(arg1.getApplicationWindowToken(), 0);
+            }
+        });
+
         textView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
@@ -40,19 +55,19 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        ImageView iv = (ImageView)findViewById(R.id.logoiv);
-        iv.setImageResource(R.drawable.gtmaps);
+        ImageView iv = (ImageView)findViewById(R.id.ivbuilding);
+        iv.setImageResource(R.drawable.coc);
     }
 
-    private static final String[] BUILDINGS = new String[] {
-            "College of Computing", "Howey","CULC", "Van Leer"
+    private static final String[] ROOMS = new String[]{
+            "301", "302", "303", "017"
     };
 
-    public void findBuilding(View view) {
-        Intent intent = new Intent(this, RoomChooseActivity.class);
-        TextView text = (TextView) findViewById(R.id.Building_Choice);
-        String message = text.getText().toString();
-        intent.putExtra("building", message);
+    public void roomSearch(View view) {
+        Intent intent = new Intent(this, DirectionsActivity.class);
+        TextView text = (TextView) findViewById(R.id.room_choice);
+        String new_message = message + " Room " + text.getText().toString();
+        intent.putExtra("room", new_message);
         startActivity(intent);
     }
 
@@ -61,4 +76,3 @@ public class MainActivity extends AppCompatActivity {
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }
-

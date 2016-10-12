@@ -9,7 +9,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:clickable="true"
     android:focusableInTouchMode="true"
-    tools:context="edu.gatech.gtmaps.MainActivity">
+    tools:context="edu.gatech.gtmaps.activities.MainActivity">
 
 
     <Button

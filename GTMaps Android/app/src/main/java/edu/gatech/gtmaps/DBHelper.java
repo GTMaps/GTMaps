@@ -52,7 +52,7 @@ import java.util.HashMap;
         @Override
         public void onCreate(SQLiteDatabase db) {
 
-            //TODO USE STRING FORMATTING INSTEAD OF A BUNCH OF PLUS SIGNS
+            //TODO CONSIDER USING STRING FORMATTING INSTEAD OF A BUNCH OF PLUS SIGNS
 
             // TODO Auto-generated method stub
             String CREATE_BUILDINGS_TABLE =
@@ -61,6 +61,27 @@ import java.util.HashMap;
                         + BUILDINGS_NAME + " TEXT"
                         + ")";
             db.execSQL(CREATE_BUILDINGS_TABLE);
+
+            String CREATE_HALLWAYS_TABLE = "CREATE TABLE " + HALLWAYS_TABLE_NAME + "("
+                    + HALLWAYS_BUILDING_ID + " TEXT, NOT NULL"
+                    + HALLWAYS_FLOOR_ID + " TEXT, NOT NULL"
+                    + HALLWAYS_HALLWAY_ID + " TEXT, NOT NULL"
+                    + HALLWAYS_HALLWAY_NAME + " TEXT,"
+
+                    + HALLWAYS_CENTER_X + " TEXT,"
+                    + HALLWAYS_CENTER_Y + " TEXT,"
+                    + HALLWAYS_LENGTH+ " TEXT,"
+                    + HALLWAYS_WIDTH+ " TEXT" +
+
+                    //Primary Key = B_uid,F_id,H_uid
+                    "PRIMARY KEY(" + HALLWAYS_BUILDING_ID + " " + HALLWAYS_FLOOR_ID + " " + HALLWAYS_HALLWAY_ID +")" +
+
+                    // Foreign Keys = B_uid
+                    "FOREIGN KEY(" + HALLWAYS_BUILDING_ID + ")"
+                    + "REFERENCES " + BUILDINGS_TABLE_NAME + "(" + BUILDINGS_ID + ")"
+
+                    +")";
+            db.execSQL(CREATE_HALLWAYS_TABLE);
 
             String CREATE_ROOMS_TABLE = "CREATE TABLE " + ROOMS_TABLE_NAME + "("
                     + ROOMS_BUILDING_ID + " TEXT, NOT NULL"
@@ -87,27 +108,6 @@ import java.util.HashMap;
                     +")";
             db.execSQL(CREATE_ROOMS_TABLE);
 
-            String CREATE_HALLWAYS_TABLE = "CREATE TABLE " + HALLWAYS_TABLE_NAME + "("
-                    + HALLWAYS_BUILDING_ID + " TEXT, NOT NULL"
-                    + HALLWAYS_FLOOR_ID + " TEXT, NOT NULL"
-                    + HALLWAYS_HALLWAY_ID + " TEXT, NOT NULL"
-                    + HALLWAYS_HALLWAY_NAME + " TEXT,"
-
-                    + HALLWAYS_CENTER_X + " TEXT,"
-                    + HALLWAYS_CENTER_Y + " TEXT,"
-                    + HALLWAYS_LENGTH+ " TEXT,"
-                    + HALLWAYS_WIDTH+ " TEXT" +
-
-                    //Primary Key = B_uid,F_id,H_uid
-                    "PRIMARY KEY(" + HALLWAYS_BUILDING_ID + " " + HALLWAYS_FLOOR_ID + " " + HALLWAYS_HALLWAY_ID +")" +
-
-                    // Foreign Keys = B_uid
-                    "FOREIGN KEY(" + HALLWAYS_BUILDING_ID + ")"
-                    + "REFERENCES " + BUILDINGS_TABLE_NAME + "(" + BUILDINGS_ID + ")"
-
-                    +")";
-            db.execSQL(CREATE_HALLWAYS_TABLE);
-
             String CREATE_JUNCTIONS_TABLE = "CREATE TABLE " + JUNCTIONS_TABLE_NAME + "("
                     + JUNCTIONS_HALLWAY_1 + " INTEGER PRIMARY KEY,"
                     + JUNCTIONS_HALLWAY_2 + " TEXT," +
@@ -127,10 +127,10 @@ import java.util.HashMap;
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             // TODO Auto-generated method stub
-            db.execSQL("DROP TABLE IF EXISTS Buildings");
-            db.execSQL("DROP TABLE IF EXISTS Rooms");
-            db.execSQL("DROP TABLE IF EXISTS Hallways");
-            db.execSQL("DROP TABLE IF EXISTS Junctions");
+            db.execSQL("DROP TABLE IF EXISTS " + BUILDINGS_TABLE_NAME);
+            db.execSQL("DROP TABLE IF EXISTS " + ROOMS_TABLE_NAME);
+            db.execSQL("DROP TABLE IF EXISTS " + HALLWAYS_TABLE_NAME);
+            db.execSQL("DROP TABLE IF EXISTS " + JUNCTIONS_TABLE_NAME);
 
             onCreate(db);
         }
