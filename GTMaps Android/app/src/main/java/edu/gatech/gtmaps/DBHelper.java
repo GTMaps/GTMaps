@@ -26,14 +26,14 @@ import java.util.HashMap;
         public static final String ROOMS_ROOM_NAME = "r_name";
         public static final String ROOMS_CENTER_X = "center_x";
         public static final String ROOMS_CENTER_Y = "center_y";
-        public static final String ROOMS_DOOR_X = "door_x";
+        public static final String ROOMS_DOOR_X = "door_x"; // How to deal with multiple doors???
         public static final String ROOMS_DOOR_Y = "door_y";
 
         public static final String HALLWAYS_TABLE_NAME = "Hallways";
         public static final String HALLWAYS_BUILDING_ID = "b_uid";
         public static final String HALLWAYS_FLOOR_ID = "f_id";
         public static final String HALLWAYS_HALLWAY_ID = "h_uid";
-        public static final String HALLWAYS_HALLWAY_NAME = "r_name";
+        public static final String HALLWAYS_HALLWAY_NAME = "h_name";
         public static final String HALLWAYS_CENTER_X = "center_x";
         public static final String HALLWAYS_CENTER_Y = "center_y";
         public static final String HALLWAYS_LENGTH = "length";
@@ -58,23 +58,23 @@ import java.util.HashMap;
             String CREATE_BUILDINGS_TABLE =
                     "CREATE TABLE " + BUILDINGS_TABLE_NAME + "("
                         + BUILDINGS_ID + " INTEGER PRIMARY KEY NOT NULL,"
-                        + BUILDINGS_NAME + " TEXT"
+                        + BUILDINGS_NAME + " VARCHAR(70)"
                         + ")";
             db.execSQL(CREATE_BUILDINGS_TABLE);
 
             String CREATE_HALLWAYS_TABLE = "CREATE TABLE " + HALLWAYS_TABLE_NAME + "("
-                    + HALLWAYS_BUILDING_ID + " TEXT, NOT NULL"
-                    + HALLWAYS_FLOOR_ID + " TEXT, NOT NULL"
-                    + HALLWAYS_HALLWAY_ID + " TEXT, NOT NULL"
-                    + HALLWAYS_HALLWAY_NAME + " TEXT,"
+                    + HALLWAYS_BUILDING_ID + " INTEGER NOT NULL,"
+                    + HALLWAYS_FLOOR_ID + " INTEGER NOT NULL,"
+                    + HALLWAYS_HALLWAY_ID + " INTEGER NOT NULL,"
+                    + HALLWAYS_HALLWAY_NAME + " VARCHAR(50),"
 
-                    + HALLWAYS_CENTER_X + " TEXT,"
-                    + HALLWAYS_CENTER_Y + " TEXT,"
-                    + HALLWAYS_LENGTH+ " TEXT,"
-                    + HALLWAYS_WIDTH+ " TEXT" +
+                    + HALLWAYS_CENTER_X + " INTEGER," // ?? same question as room table
+                    + HALLWAYS_CENTER_Y + " INTEGER,"
+                    + HALLWAYS_LENGTH+ " INTEGER,"
+                    + HALLWAYS_WIDTH+ " INTEGER," +
 
-                    //Primary Key = B_uid,F_id,H_uid
-                    "PRIMARY KEY(" + HALLWAYS_BUILDING_ID + " " + HALLWAYS_FLOOR_ID + " " + HALLWAYS_HALLWAY_ID +")" +
+                    //Primary Key = B_uid,F_id,H_uid      ?? same question as room table
+                    "PRIMARY KEY(" + HALLWAYS_BUILDING_ID + " " + HALLWAYS_FLOOR_ID + " " + HALLWAYS_HALLWAY_ID +")," +
 
                     // Foreign Keys = B_uid
                     "FOREIGN KEY(" + HALLWAYS_BUILDING_ID + ")"
@@ -84,24 +84,24 @@ import java.util.HashMap;
             db.execSQL(CREATE_HALLWAYS_TABLE);
 
             String CREATE_ROOMS_TABLE = "CREATE TABLE " + ROOMS_TABLE_NAME + "("
-                    + ROOMS_BUILDING_ID + " TEXT, NOT NULL"
-                    + ROOMS_FLOOR_ID + " TEXT, NOT NULL"
-                    + ROOMS_ROOM_ID + " TEXT, NOT NULL"
-                    + ROOMS_ROOM_NAME + " TEXT,"
+                    + ROOMS_BUILDING_ID + " INTEGER NOT NULL,"
+                    + ROOMS_FLOOR_ID + " INTEGER NOT NULL,"
+                    + ROOMS_ROOM_ID + " INTEGER NOT NULL,"
+                    + ROOMS_ROOM_NAME + " VARCHAR(50),"
 
-                    + ROOMS_HALLWAY_ID + " TEXT, NOT NULL"
-                    + ROOMS_HALLWAY_SIDE + " TEXT, NOT NULL"
-                    + ROOMS_CENTER_X + " TEXT,"
-                    + ROOMS_CENTER_Y + " TEXT,"
-                    + ROOMS_DOOR_X + " TEXT,"
-                    + ROOMS_DOOR_Y + " TEXT" +
+                    + ROOMS_HALLWAY_ID + " INTEGER NOT NULL,"
+                    + ROOMS_HALLWAY_SIDE + " TEXT NOT NULL," // boolean(small int)???
+                    + ROOMS_CENTER_X + " INTEGER," // why nullable???
+                    + ROOMS_CENTER_Y + " INTEGER,"
+                    + ROOMS_DOOR_X + " INTEGER,"
+                    + ROOMS_DOOR_Y + " INTEGER," +
 
-                    //Primary Key = B_uid,F_id,R_uid
-                    "PRIMARY KEY(" + ROOMS_BUILDING_ID + ROOMS_FLOOR_ID + ROOMS_ROOM_ID +")" +
+                    //Primary Key = B_uid,F_id,R_uid            ??? why not just use r_uid since it's unique?
+                    "PRIMARY KEY(" + ROOMS_BUILDING_ID + ROOMS_FLOOR_ID + ROOMS_ROOM_ID +")," +
 
                     // Foreign Keys = B_uid, H_uid
                     "FOREIGN KEY(" + ROOMS_BUILDING_ID + ")"
-                            + "REFERENCES " + BUILDINGS_TABLE_NAME + "(" + BUILDINGS_ID + ")" +
+                            + "REFERENCES " + BUILDINGS_TABLE_NAME + "(" + BUILDINGS_ID + ")," +
                     "FOREIGN KEY(" + ROOMS_HALLWAY_ID + ")"
                             + "REFERENCES " + HALLWAYS_TABLE_NAME + "(" + HALLWAYS_HALLWAY_ID + ")"
 
@@ -109,15 +109,18 @@ import java.util.HashMap;
             db.execSQL(CREATE_ROOMS_TABLE);
 
             String CREATE_JUNCTIONS_TABLE = "CREATE TABLE " + JUNCTIONS_TABLE_NAME + "("
-                    + JUNCTIONS_HALLWAY_1 + " INTEGER PRIMARY KEY,"
-                    + JUNCTIONS_HALLWAY_2 + " TEXT," +
+                    + JUNCTIONS_HALLWAY_1 + " INTEGER,"
+                    + JUNCTIONS_HALLWAY_2 + " INTEGER," +
 
                     //Primary Key = H_uid1, H_uid2
-                    "PRIMARY KEY(" + JUNCTIONS_HALLWAY_1 + " " + JUNCTIONS_HALLWAY_2+")" +
+                    "PRIMARY KEY(" + JUNCTIONS_HALLWAY_1 + ", " + JUNCTIONS_HALLWAY_2 + ")," +
 
-                    // Foreign Keys = B_uid
-                    "FOREIGN KEY(" + HALLWAYS_BUILDING_ID + ")"
-                    + "REFERENCES " + BUILDINGS_TABLE_NAME + "(" + BUILDINGS_ID + ")"
+                    // Foreign Keys = H_uid1, H_uid2
+                    "FOREIGN KEY(" + JUNCTIONS_HALLWAY_1 + ")"
+                    + "REFERENCES " + HALLWAYS_TABLE_NAME + "(" + HALLWAYS_HALLWAY_ID + ")," +
+
+                    "FOREIGN KEY(" + JUNCTIONS_HALLWAY_2 + ")"
+                    + "REFERENCES " + HALLWAYS_TABLE_NAME + "(" + HALLWAYS_HALLWAY_ID + ")"
 
                     + ")";
 
