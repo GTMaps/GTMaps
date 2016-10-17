@@ -6,9 +6,9 @@ public class Hall implements BuildingSpace{
 
     private String name;
     private List<Room> roomsA;
-    private List<Room> roomsB; // I don't quite get this A/B design
+    private List<Room> roomsB;
     private double length;
-    private List<Junction> junctions; // how do we know which end the junction is at?
+    private List<Junction> junctions; // add junctions1 and junctions2
 
     public Hall(String name, List<Room> roomsA, List<Room> roomsB, double length, List<Junction> junctions) {
         this.name = name;

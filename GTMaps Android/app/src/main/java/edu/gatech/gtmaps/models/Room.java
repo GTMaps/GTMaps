@@ -3,7 +3,7 @@ package edu.gatech.gtmaps.models;
 public class Room implements BuildingSpace {
 
     private Building building;
-    private Hall hall; // not in the python file. might be necessary???
+    private Hall hall;
     private String number;
 
     public Room(String number, Building building, Hall hall) {
