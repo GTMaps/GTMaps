@@ -19,13 +19,13 @@ public class SearchObject {
      * to find target room.
      * @param target The desired room to navigate to.
      * @param start The starting hallway.
-     * @return LinkedList of building spaces to navigate from start ot target.
+     * @return LinkedList of building spaces to navigate from start to target.
      */
     public static LinkedList<BuildingSpace> find(Room target, BuildingSpace start) {
-        //Initialize datastructres/loop variables
+        //Initialize datastructures/loop variables
         LinkedList<BuildingSpace> ret = new LinkedList<>();
         LinkedList<BuildingSpace> visited = new LinkedList<>();
-        LinkedList<Node> struc = new LinkedList<>();
+        LinkedList<Node> frontier = new LinkedList<>();
         boolean found = false;
         Node currNode = new Node(start, null);
 
@@ -36,15 +36,15 @@ public class SearchObject {
                 List<Hall> halls = j.getHalls();
                 for (int i = 0; i < halls.size(); i++) {
                     if (halls.get(i) != currNode.h) {
-                        struc.push(new Node(halls.get(i), currNode));
+                        frontier.push(new Node(halls.get(i), currNode));
                     }
                 }
             }
 
-            if (!struc.isEmpty()) {
-                Node next = struc.pop();
-                while (visited.contains(next.h) & !struc.isEmpty()) {
-                    next = struc.pop();
+            if (!frontier.isEmpty()) {
+                Node next = frontier.pop();
+                while (visited.contains(next.h) & !frontier.isEmpty()) {
+                    next = frontier.pop();
                     currNode = next;
                 }
             }
@@ -56,12 +56,17 @@ public class SearchObject {
                 found = true;
             }
         }
+
+        while (currNode != null) {
+            ret.push(currNode.h);
+            currNode = currNode.p;
+        }
         return ret;
     }
 
     private static class Node {
         private BuildingSpace h;
-        Node p;
+        private Node p;
         private Node(BuildingSpace thisHallway, Node previousHallway) {
             h = thisHallway;
             p = previousHallway;
