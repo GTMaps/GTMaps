@@ -1,6 +1,14 @@
 package edu.gatech.gtmaps.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -29,7 +37,22 @@ public class DirectionsActivity extends AppCompatActivity {
 
 
         ImageView iv = (ImageView)findViewById(R.id.ivfloorplan);
-        iv.setImageResource(R.drawable.ccbfloor);
+
+        Drawable d = getResources().getDrawable(R.drawable.ccbfloor, getTheme());
+        drawDirection(iv, 0, 0, d.getIntrinsicWidth() - 1, d.getIntrinsicHeight() - 1);
+    }
+
+    private void drawDirection(ImageView iv, int startx, int starty, int stopx, int stopy) {
+        Bitmap floorplan = BitmapFactory.decodeResource(getResources(), R.drawable.ccbfloor);
+        Bitmap direction = Bitmap.createBitmap(floorplan.getWidth(), floorplan.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(direction);
+        canvas.drawBitmap(floorplan, 0, 0, null);
+
+        Paint paint = new Paint();
+        paint.setColor(Color.RED);
+        paint.setStrokeWidth(5);
+        canvas.drawLine(startx, starty, stopx, stopy, paint);
+        iv.setImageDrawable(new BitmapDrawable(getResources(), direction));
     }
 
     public void home(View view) {
