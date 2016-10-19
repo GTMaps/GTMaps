@@ -2,7 +2,7 @@ package edu.gatech.gtmaps.models;
 
 import java.util.List;
 
-public class Hall implements BuildingSpace{
+public class Hallway implements BuildingSpace{
 
     private String name;
     private List<Room> roomsA;
@@ -10,7 +10,7 @@ public class Hall implements BuildingSpace{
     private double length;
     private List<Junction> junctions; // add junctions1 and junctions2
 
-    public Hall(String name, List<Room> roomsA, List<Room> roomsB, double length, List<Junction> junctions) {
+    public Hallway(String name, List<Room> roomsA, List<Room> roomsB, double length, List<Junction> junctions) {
         this.name = name;
         this.roomsA = roomsA;
         this.roomsB = roomsB;

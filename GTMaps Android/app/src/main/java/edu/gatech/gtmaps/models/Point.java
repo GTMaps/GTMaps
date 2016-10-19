@@ -22,6 +22,15 @@ public class Point {
         y = P.y;
         return this;
     };
+
+    public float getX(){
+        return this.x;
+    }
+
+    public float getY(){
+        return this.y;
+    }
+
 //    Point setToMouse() {
 //        x = mouseX;
 //        y = mouseY;

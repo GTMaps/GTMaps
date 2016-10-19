@@ -7,4 +7,9 @@ package edu.gatech.gtmaps.models;
 
 public interface BuildingSpace {
     public String getName();
+
+    public enum HallwaySide {
+        SIDE_A,
+        SIDE_B
+    };
 }
