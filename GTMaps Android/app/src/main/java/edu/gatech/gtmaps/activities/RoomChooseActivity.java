@@ -13,6 +13,8 @@ import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.Arrays;
+
 import edu.gatech.gtmaps.R;
 
 public class RoomChooseActivity extends AppCompatActivity {
@@ -66,8 +68,15 @@ public String message;
     public void roomSearch(View view) {
         Intent intent = new Intent(this, DirectionsActivity.class);
         TextView text = (TextView) findViewById(R.id.room_choice);
-        String new_message = message + " Room " + text.getText().toString();
-        intent.putExtra("room", new_message);
+        if (Arrays.asList(ROOMS).contains(text.getText().toString())) {
+            String new_message = " Room " + text.getText().toString();
+            intent.putExtra("room", new_message);
+            intent.putExtra("building", message);
+        }
+        startActivity(intent);
+    }
+    public void home(View view) {
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 
