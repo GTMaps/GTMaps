@@ -58,7 +58,7 @@ import java.util.HashMap;
             String CREATE_BUILDINGS_TABLE =
                     "CREATE TABLE " + BUILDINGS_TABLE_NAME + "("
                         + BUILDINGS_ID + " INTEGER PRIMARY KEY NOT NULL,"
-                        + BUILDINGS_NAME + " VARCHAR(70)"
+                        + BUILDINGS_NAME + " TEXT"
                         + ")";
             db.execSQL(CREATE_BUILDINGS_TABLE);
 
@@ -66,14 +66,14 @@ import java.util.HashMap;
                     + HALLWAYS_BUILDING_ID + " INTEGER NOT NULL,"
                     + HALLWAYS_FLOOR_ID + " INTEGER NOT NULL,"
                     + HALLWAYS_HALLWAY_ID + " INTEGER NOT NULL,"
-                    + HALLWAYS_HALLWAY_NAME + " VARCHAR(50),"
+                    + HALLWAYS_HALLWAY_NAME + " TEXT,"
 
                     + HALLWAYS_CENTER_X + " INTEGER," // ?? same question as room table
                     + HALLWAYS_CENTER_Y + " INTEGER,"
                     + HALLWAYS_LENGTH+ " INTEGER,"
                     + HALLWAYS_WIDTH+ " INTEGER," +
 
-                    //Primary Key = B_uid,F_id,H_uid      ?? same question as room table
+                    //Primary Key = B_uid,F_id,H_uid
                     "PRIMARY KEY(" + HALLWAYS_BUILDING_ID + " " + HALLWAYS_FLOOR_ID + " " + HALLWAYS_HALLWAY_ID +")," +
 
                     // Foreign Keys = B_uid
@@ -87,7 +87,7 @@ import java.util.HashMap;
                     + ROOMS_BUILDING_ID + " INTEGER NOT NULL,"
                     + ROOMS_FLOOR_ID + " INTEGER NOT NULL,"
                     + ROOMS_ROOM_ID + " INTEGER NOT NULL,"
-                    + ROOMS_ROOM_NAME + " VARCHAR(50),"
+                    + ROOMS_ROOM_NAME + " TEXT,"
 
                     + ROOMS_HALLWAY_ID + " INTEGER NOT NULL,"
                     + ROOMS_HALLWAY_SIDE + " TEXT NOT NULL," // boolean(small int)???
