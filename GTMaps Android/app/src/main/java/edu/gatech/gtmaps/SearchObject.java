@@ -4,9 +4,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import edu.gatech.gtmaps.models.BuildingSpace;
+import edu.gatech.gtmaps.models.Hallway;
 import edu.gatech.gtmaps.models.Junction;
 import edu.gatech.gtmaps.models.Room;
-import edu.gatech.gtmaps.models.Hall;
 
 /**
  * Static search class for the application
@@ -32,11 +32,11 @@ public class SearchObject {
         while (!found) {
             visited.add(currNode.h);
 
-            for (Junction j :( (Hall) currNode.h).getJunctions()) {
-                List<Hall> halls = j.getHalls();
-                for (int i = 0; i < halls.size(); i++) {
-                    if (halls.get(i) != currNode.h) {
-                        frontier.push(new Node(halls.get(i), currNode));
+            for (Junction j :( (Hallway) currNode.h).getJunctions()) {
+                List<Hallway> hallways = j.getHallways();
+                for (int i = 0; i < hallways.size(); i++) {
+                    if (hallways.get(i) != currNode.h) {
+                        frontier.push(new Node(hallways.get(i), currNode));
                     }
                 }
             }
@@ -52,7 +52,7 @@ public class SearchObject {
                 visited = new LinkedList<>();
             }
 
-            if (((Hall) currNode.h).getRoomsA().contains(target) || ((Hall) currNode.h).getRoomsB().contains(target)) {
+            if (((Hallway) currNode.h).getRoomsA().contains(target) || ((Hallway) currNode.h).getRoomsB().contains(target)) {
                 found = true;
             }
         }

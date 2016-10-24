@@ -20,8 +20,8 @@ public abstract class Building {
         return name;
     }
 
-    public List<Hall> getHalls() {
-        return halls;
+    public List<Hallway> getHallways() {
+        return hallways;
     }
 
     public List<Room> getRooms() {
