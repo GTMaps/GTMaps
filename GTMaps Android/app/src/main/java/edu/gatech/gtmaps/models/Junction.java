@@ -8,9 +8,6 @@ public class Junction {
 
     public Junction(List<Hall> halls) {
         this.halls = halls;
-        for (Hall hall : halls) {
-            hall.addJunction(this);
-        }
     }
 
     public List<Hall> getHalls() {

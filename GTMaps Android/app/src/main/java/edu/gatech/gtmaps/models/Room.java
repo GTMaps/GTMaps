@@ -4,11 +4,20 @@ public class Room implements BuildingSpace {
 
     private Building building;
     private Hall hall;
+    private int floor;
+    private Point center;
+    private Point door;
+    private String side;
     private String number;
 
-    public Room(String number, Building building, Hall hall) {
+    public Room(String number, Building building, Hall hall, int floor, Point center, Point door, String side) {
         this.building = building;
         this.hall = hall;
+        this.number = number;
+        this.floor = floor;
+        this.center = center;
+        this.door = door;
+        this.side = side;
         this.number = number;
     }
 

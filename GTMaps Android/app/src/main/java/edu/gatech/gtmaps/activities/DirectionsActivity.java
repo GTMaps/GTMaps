@@ -15,7 +15,16 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.LinkedList;
+
 import edu.gatech.gtmaps.R;
+import edu.gatech.gtmaps.SearchObject;
+import edu.gatech.gtmaps.models.Building;
+import edu.gatech.gtmaps.models.BuildingSpace;
+import edu.gatech.gtmaps.models.Hall;
+import edu.gatech.gtmaps.models.Room;
+
+import static edu.gatech.gtmaps.SearchObject.find;
 
 public class DirectionsActivity extends AppCompatActivity {
     public String room_message;
@@ -34,15 +43,25 @@ public class DirectionsActivity extends AppCompatActivity {
         TextView text2 = (TextView) findViewById(R.id.building_text);
         text2.setText(building_message);
 
-
-
         ImageView iv = (ImageView)findViewById(R.id.ivfloorplan);
 
-        Drawable d = getResources().getDrawable(R.drawable.ccbfloor, getTheme());
-        drawDirection(iv, 0, 0, d.getIntrinsicWidth() - 1, d.getIntrinsicHeight() - 1);
+//        Drawable d = getResources().getDrawable(R.drawable.ccbfloor, getTheme());
+
+//        drawDirections(iv, d.getIntrinsicWidth() - 1, d.getIntrinsicHeight() - 1);
+//        drawDirections(iv, someRoom);
     }
 
-    private void drawDirection(ImageView iv, int startx, int starty, int stopx, int stopy) {
+    private void drawDirections(ImageView iv, Room target) {
+        BuildingSpace entrance = target.getBuilding().getEntrance();
+        LinkedList<BuildingSpace> route = SearchObject.find(target, entrance);
+
+        for (BuildingSpace hallway : route) {
+            drawDirection(iv, (Hall) hallway);
+        }
+    }
+
+    private void drawDirection(ImageView iv, Hall hallway) {
+        // TODO: update floorplan corresponding to the current floor
         Bitmap floorplan = BitmapFactory.decodeResource(getResources(), R.drawable.ccbfloor);
         Bitmap direction = Bitmap.createBitmap(floorplan.getWidth(), floorplan.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(direction);
@@ -51,7 +70,12 @@ public class DirectionsActivity extends AppCompatActivity {
         Paint paint = new Paint();
         paint.setColor(Color.RED);
         paint.setStrokeWidth(5);
-        canvas.drawLine(startx, starty, stopx, stopy, paint);
+        canvas.drawLine(
+                hallway.getEnd1().getX(),
+                hallway.getEnd1().getY(),
+                hallway.getEnd2().getX(),
+                hallway.getEnd2().getY(),
+                paint);
         iv.setImageDrawable(new BitmapDrawable(getResources(), direction));
     }
 

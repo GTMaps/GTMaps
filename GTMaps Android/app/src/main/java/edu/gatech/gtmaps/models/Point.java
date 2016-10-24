@@ -71,7 +71,17 @@ public class Point {
         x*=C.x+s*(x-C.x);
         y*=C.y+s*(y-C.y);
         return this;
-    }    // P.scale(s,C): scales wrt C: P=L(C,P,s);
+    }
+
+    public float getX() {
+        return x;
+    }
+
+    public float getY() {
+        return y;
+    }
+
+    // P.scale(s,C): scales wrt C: P=L(C,P,s);
 //    Point rotate(float a) {
 //        float dx=x, dy=y, c=cos(a), s=sin(a);
 //        x=c*dx+s*dy;

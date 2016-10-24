@@ -96,8 +96,8 @@ import java.util.HashMap;
                     + ROOMS_DOOR_X + " INTEGER,"
                     + ROOMS_DOOR_Y + " INTEGER," +
 
-                    //Primary Key = B_uid,F_id,R_uid            ??? why not just use r_uid since it's unique?
-                    "PRIMARY KEY(" + ROOMS_BUILDING_ID + ROOMS_FLOOR_ID + ROOMS_ROOM_ID +")," +
+                    //Primary Key = B_uid,F_id,door
+                    "PRIMARY KEY(" + ROOMS_BUILDING_ID + ROOMS_FLOOR_ID + ROOMS_DOOR_X + ROOMS_DOOR_Y + ")," +
 
                     // Foreign Keys = B_uid, H_uid
                     "FOREIGN KEY(" + ROOMS_BUILDING_ID + ")"
