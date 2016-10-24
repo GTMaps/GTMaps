@@ -7,7 +7,7 @@ public class Junction {
     private List<Hallway> hallways;
 
     public Junction(List<Hallway> hallways) {
-        this.halls = hallways;
+        this.hallways = hallways;
     }
 
     public List<Hallway> getHallways() {

@@ -3,14 +3,14 @@ package edu.gatech.gtmaps.models;
 public class Room implements BuildingSpace {
 
     private Building building;
-    private Hall hall;
+    private Hallway hall;
     private int floor;
     private Point center;
     private Point door;
     private String side;
     private String number;
 
-    public Room(String number, Building building, Hall hall, int floor, Point center, Point door, String side) {
+    public Room(String number, Building building, Hallway hall, int floor, Point center, Point door, String side) {
         this.building = building;
         this.hall = hall;
         this.number = number;
@@ -29,7 +29,7 @@ public class Room implements BuildingSpace {
         return building;
     }
 
-    public Hall getHall() {
+    public Hallway getHall() {
         return hall;
     }
 

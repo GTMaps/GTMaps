@@ -5,13 +5,13 @@ import java.util.List;
 public abstract class Building {
 
     private String name;
-    private List<Hall> halls;
+    private List<Hallway> hallways;
     private List<Room> rooms;
-    private Hall entrance;
+    private Hallway entrance;
 
-    public Building(String name, List<Hall> halls, List<Room> rooms, Hall entrance) {
+    public Building(String name, List<Hallway> halls, List<Room> rooms, Hallway entrance) {
         this.name = name;
-        this.halls = halls;
+        this.hallways = halls;
         this.rooms = rooms;
         this.entrance = entrance;
     }
@@ -28,7 +28,7 @@ public abstract class Building {
         return rooms;
     }
 
-    public Hall getEntrance() {
+    public Hallway getEntrance() {
         return entrance;
     }
 
