@@ -64,6 +64,22 @@ public class SearchObject {
         return ret;
     }
 
+    /**
+     * Plaintext translation of a list of building spaces. Currently incomplete.
+     * @param dir LinkedList of BuildingSpace objects which constitute a path to be translated.
+     * @return String representing the directions to navigate from the start of dir to the end.
+     */
+    public static String translate(LinkedList<BuildingSpace> dir) {
+        StringBuilder sb = new StringBuilder();
+        for (BuildingSpace node : dir) {
+            sb.append(node.getClass());
+            sb.append(": ");
+            sb.append(node.getName());
+            sb.append("\n");
+        }
+        return sb.toString();
+    }
+
     private static class Node {
         private BuildingSpace h;
         private Node p;
