@@ -7,11 +7,11 @@ public class Room implements BuildingSpace {
     private int floor;
     private Point center;
     private Point door;
-    private String side;
+    private char side;
     private String number;
 
-    public Room(String number, Building building, Hallway hall, int floor, Point center, Point door, String side) {
-        this.building = building;
+    public Room(String number, Hallway hall, int floor, Point center, Point door, char side) {
+        //this.building = building;
         this.hall = hall;
         this.number = number;
         this.floor = floor;
@@ -19,6 +19,10 @@ public class Room implements BuildingSpace {
         this.door = door;
         this.side = side;
         this.number = number;
+    }
+
+    public void setHall(Hallway h) {
+        this.hall = h;
     }
 
     public String getNumber() {
@@ -32,6 +36,8 @@ public class Room implements BuildingSpace {
     public Hallway getHall() {
         return hall;
     }
+
+    public char getSide() { return this.side; }
 
     public boolean equals(Object other) {
         if (other instanceof Room) {

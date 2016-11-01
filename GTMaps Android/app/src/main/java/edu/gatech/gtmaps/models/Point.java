@@ -8,7 +8,7 @@ package edu.gatech.gtmaps.models;
 public class Point {
     float x, y;
 
-    Point(float px, float py) {
+    public Point(float px, float py) {
         x = px;
         y = py;
     };
