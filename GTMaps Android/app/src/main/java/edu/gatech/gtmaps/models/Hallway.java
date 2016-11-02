@@ -67,7 +67,7 @@ public class Hallway implements BuildingSpace{
      * @param side Character 'A' or 'B' determining which list to add to.
      * @param rooms A list of rooms which is added into the roomsA or roomsB list.
      */
-    public void addRooms(char side, List<Room> rooms) throws IllegalAccessException {
+    public void addRooms(char side, List<Room> rooms) throws IllegalArgumentException {
         if (rooms.isEmpty()) { return; }
         switch (Character.toUpperCase(side)) {
             case 'A':
