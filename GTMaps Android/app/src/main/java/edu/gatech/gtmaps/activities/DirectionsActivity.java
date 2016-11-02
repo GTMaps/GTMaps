@@ -21,7 +21,7 @@ import edu.gatech.gtmaps.R;
 import edu.gatech.gtmaps.SearchObject;
 import edu.gatech.gtmaps.models.Building;
 import edu.gatech.gtmaps.models.BuildingSpace;
-import edu.gatech.gtmaps.models.Hall;
+import edu.gatech.gtmaps.models.Hallway;
 import edu.gatech.gtmaps.models.Room;
 
 import static edu.gatech.gtmaps.SearchObject.find;
@@ -56,11 +56,11 @@ public class DirectionsActivity extends AppCompatActivity {
         LinkedList<BuildingSpace> route = SearchObject.find(target, entrance);
 
         for (BuildingSpace hallway : route) {
-            drawDirection(iv, (Hall) hallway);
+            drawDirection(iv, (Hallway) hallway);
         }
     }
 
-    private void drawDirection(ImageView iv, Hall hallway) {
+    private void drawDirection(ImageView iv, Hallway hallway) {
         // TODO: update floorplan corresponding to the current floor
         Bitmap floorplan = BitmapFactory.decodeResource(getResources(), R.drawable.ccbfloor);
         Bitmap direction = Bitmap.createBitmap(floorplan.getWidth(), floorplan.getHeight(), Bitmap.Config.ARGB_8888);
