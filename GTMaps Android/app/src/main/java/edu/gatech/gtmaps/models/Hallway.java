@@ -72,8 +72,10 @@ public class Hallway implements BuildingSpace{
         switch (Character.toUpperCase(side)) {
             case 'A':
                 this.roomsA.addAll(rooms);
+                break;
             case 'B':
                 this.roomsB.addAll(rooms);
+                break;
             default:
                 throw new IllegalArgumentException("Character " + side + " not supported.");
         }
