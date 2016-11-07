@@ -42,8 +42,9 @@ public class Room implements BuildingSpace {
     public boolean equals(Object other) {
         if (other instanceof Room) {
             Room other_room = (Room) other;
-            return building.equals(other_room.getBuilding())
-                    && number.equals(other_room.getNumber());
+            //return building.equals(other_room.getBuilding())
+            //        && number.equals(other_room.getNumber());
+            return number.equals(other_room.getNumber());
         }
         return false;
     }
