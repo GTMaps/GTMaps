@@ -35,7 +35,7 @@ public class SearchObject {
             for (Junction j :( (Hallway) currNode.h).getJunctions()) {
                 List<Hallway> hallways = j.getHallways();
                 for (int i = 0; i < hallways.size(); i++) {
-                    if (hallways.get(i) != currNode.h) {
+                    if (!hallways.get(i).getName().equals(currNode.h.getName())) {
                         frontier.push(new Node(hallways.get(i), currNode));
                     }
                 }
@@ -45,8 +45,8 @@ public class SearchObject {
                 Node next = frontier.pop();
                 while (visited.contains(next.h) & !frontier.isEmpty()) {
                     next = frontier.pop();
-                    currNode = next;
                 }
+                currNode = next;
             }
             else {
                 visited = new LinkedList<>();
