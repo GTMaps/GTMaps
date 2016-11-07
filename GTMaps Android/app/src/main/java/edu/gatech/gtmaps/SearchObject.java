@@ -27,7 +27,7 @@ public class SearchObject {
         LinkedList<BuildingSpace> visited = new LinkedList<>();
         LinkedList<Node> frontier = new LinkedList<>();
         boolean found = false;
-        Node currNode = new Node(start, null);
+        Node currNode = new Node(start, null, null);
 
         while (!found) {
             visited.add(currNode.h);
@@ -36,7 +36,7 @@ public class SearchObject {
                 List<Hallway> hallways = j.getHallways();
                 for (int i = 0; i < hallways.size(); i++) {
                     if (!hallways.get(i).getName().equals(currNode.h.getName())) {
-                        frontier.push(new Node(hallways.get(i), currNode));
+                        frontier.push(new Node(hallways.get(i), currNode, j));
                     }
                 }
             }
@@ -71,21 +71,34 @@ public class SearchObject {
      */
     public static String translate(LinkedList<BuildingSpace> dir) {
         StringBuilder sb = new StringBuilder();
-        for (BuildingSpace node : dir) {
-            sb.append(node.getClass());
-            sb.append(": ");
+        for (int i = 1; i < dir.size(); i++) {
+            BuildingSpace node = dir.get(i);
+            String direction = (true) ? "left" : "right"; //replace true with math logic to figure out side hall is on
+            sb.append("Turn ");
+            sb.append(direction);
+            sb.append(" at end of hallway ");
+            sb.append(dir.get(i-1).getName());
+            sb.append(" onto ");
             sb.append(node.getName());
-            sb.append("\n");
+            sb.append(".\n");
         }
+        sb.append("Desired room will be on this hallway (");
+        sb.append(dir.getLast().getName());
+        String hall_side = (true) ? "right" : "left"; //replace true with math logic to figure out side room is on
+        sb.append(") on the ");
+        sb.append(hall_side);
+        sb.append(" of the hall.\n");
         return sb.toString();
     }
 
     private static class Node {
         private BuildingSpace h;
+        private Junction j;
         private Node p;
-        private Node(BuildingSpace thisHallway, Node previousHallway) {
+        private Node(BuildingSpace thisHallway, Node previousHallway, Junction connector) {
             h = thisHallway;
             p = previousHallway;
+            j = connector;
         }
     }
 }
