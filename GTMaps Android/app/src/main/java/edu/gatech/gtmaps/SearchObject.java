@@ -88,6 +88,7 @@ public class SearchObject {
             sb.append(" onto ");
             sb.append(nextHall.getName());
             sb.append(".\n");
+            thisHall = nextHall;
         }
         sb.append("Desired room will be on this hallway (");
         sb.append(thisHall.getName());
