@@ -2,7 +2,7 @@ package edu.gatech.gtmaps.models;
 
 import java.util.List;
 
-public class Junction {
+public class Junction implements BuildingSpace {
 
     private List<Hallway> hallways;
 
@@ -22,4 +22,8 @@ public class Junction {
         return hallStr.substring(0, hallStr.length() - 2);
     }
 
+    @Override
+    public String getName() {
+        return this.toString();
+    }
 }
