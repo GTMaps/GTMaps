@@ -70,12 +70,32 @@ public class Vec {
         y += s*V.y;
         return this;
     };
-//    Vec rotateBy(float a) {
-//        float xx=x, yy=y;
-//        x=xx*cos(a)-yy*sin(a);
-//        y=xx*sin(a)+yy*cos(a);
-//        return this;
-//    };
+
+    //left this be the current forward direction
+    //If this method returns true, the turn is a left turn.
+    //Else it is a right turn
+    boolean isLeftTurn(Vec prevForwardDirection) {
+        return det(prevForwardDirection,this) > 0;
+    }
+    //a here is in radian, rotate in clockwise
+    Vec rotateBy(float a) {
+        float xx=x, yy=y;
+        x= (float) (xx*Math.cos(a)-yy*Math.sin(a));
+        y= (float) (xx*Math.sin(a)+yy*Math.cos(a));
+        return this;
+    };
+
+    float dot(Vec U, Vec V) {
+        return U.x*V.x+U.y*V.y;
+    }                                                     // dot(this,V): U*V (dot product U*V)
+    float det(Vec U, Vec V) {
+        return dot(R(U), V);
+    }
+
+    Vec R(Vec V) {
+        return new Vec(-V.y, V.x);
+    };                                                             // V turned 90 degrees (clockwise)
+
     Vec left() {
         float m=x;
         x=-y;
