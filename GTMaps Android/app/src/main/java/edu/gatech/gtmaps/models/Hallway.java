@@ -5,8 +5,11 @@ import java.util.List;
 
 public class Hallway implements BuildingSpace{
 
+    private String id;
+    private String building_id;
+    private String floor_id;
+
     private String name;
-    private int floor;
     private Point end1;
     private Point end2;
     private List<Room> roomsA;
@@ -15,28 +18,37 @@ public class Hallway implements BuildingSpace{
     private double width;
     private List<Junction> junctions; // add junctions1 and junctions2
 
-    public Hallway(String name, double length, double width, int floor, Point end1, Point end2) {
+    public Hallway(String id, String building_id, String floor_id, String name, double length, double width, Point end1, Point end2) {
+        this.id = id;
+        this.building_id = building_id;
+        this.floor_id = floor_id;
+
         this.name = name;
         this.roomsA = new LinkedList<Room>();
         this.roomsB = new LinkedList<Room>();
         this.length = length;
         this.width = width;
         this.junctions = new LinkedList<Junction>();
-        this.floor = floor;
         this.end1 = end1;
         this.end2 = end2;
     }
 
-    public Hallway(String name, LinkedList<Room> roomsA, LinkedList<Room> roomsB, double length, double width, List<Junction> junctions, int floor, Point end1, Point end2) {
-        this(name, length, width, floor, end1, end2);
+    public Hallway(String id, String building_id, String floor_id, String name,
+                   LinkedList<Room> roomsA, LinkedList<Room> roomsB, double length, double width,
+                   List<Junction> junctions, Point end1, Point end2) {
+
+        this(id, building_id, floor_id, name, length, width, end1, end2);
         this.roomsA = roomsA;
         this.roomsB = roomsB;
         this.junctions = junctions;
     }
 
+    /* getters */
     public String getName() {
         return name;
     }
+
+    public String getId() { return id;}
 
     public List<Room> getRoomsA() { return roomsA; }
 
@@ -46,9 +58,7 @@ public class Hallway implements BuildingSpace{
         return length;
     }
 
-    public Point getEnd1() {
-        return end1;
-    }
+    public Point getEnd1() { return end1; }
 
     public Point getEnd2() {
         return end2;
@@ -62,49 +72,48 @@ public class Hallway implements BuildingSpace{
         junctions.add(junction);
     }
 
+
+
     /**
      * Adds a set of rooms to one side of this hallway.
      * @param side Character 'A' or 'B' determining which list to add to.
      * @param rooms A list of rooms which is added into the roomsA or roomsB list.
      */
-    public void addRooms(char side, List<Room> rooms) throws IllegalArgumentException {
+    public void addRooms(HallwaySide side, List<Room> rooms) throws IllegalAccessException {
         if (rooms.isEmpty()) { return; }
-        switch (Character.toUpperCase(side)) {
-            case 'A':
+        switch (side) {
+            case SIDE_A:
                 this.roomsA.addAll(rooms);
-                break;
-            case 'B':
+            case SIDE_B:
                 this.roomsB.addAll(rooms);
-                break;
             default:
                 throw new IllegalArgumentException("Character " + side + " not supported.");
         }
     }
 
     public String toString() {
-        String hallStr = "Hallway ";
+        String hallway_str = "Hallway ";
 
         if (name != null) {
-            hallStr += String.format("%s: ",name);
+            hallway_str += String.format("%s: ",name);
         }
+        hallway_str += "contains rooms ";
 
-        hallStr += "contains rooms ";
-
-        //vStringify rooms on side A of the hallway
+        // Stringify rooms on side A of the hallway
         for (Room room : roomsA) {
-            hallStr += room.toString() + ", ";
+            hallway_str += room.toString() + ", ";
         }
-        hallStr = hallStr.substring(0, hallStr.length() - 2); //omit extra comma and space
+        hallway_str = hallway_str.substring(0, hallway_str.length() - 2); //omit extra comma and space
 
-        hallStr += " and ";
+        hallway_str += " and ";
 
         // Stringify rooms on side B of the hallway
         for (Room room : roomsB) {
-            hallStr += room.toString() + ", ";
+            hallway_str += room.toString() + ", ";
         }
-        hallStr = hallStr.substring(0, hallStr.length() - 2); //omit extra comma and space
+        hallway_str = hallway_str.substring(0, hallway_str.length() - 2); //omit extra comma and space
 
-        return hallStr;
+        return hallway_str;
     }
 
 }
