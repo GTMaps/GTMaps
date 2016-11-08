@@ -28,8 +28,12 @@ public class Junction implements BuildingSpace {
         return hallStr.substring(0, hallStr.length() - 2);
     }
 
-    @Override
     public String getName() {
+        return this.toString();
+    }
+
+    @Override
+    public String getId() {
         return this.toString();
     }
 }

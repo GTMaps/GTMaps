@@ -35,7 +35,7 @@ public class SearchObject {
             for (Junction j :( (Hallway) currNode.h).getJunctions()) {
                 List<Hallway> hallways = j.getHallways();
                 for (int i = 0; i < hallways.size(); i++) {
-                    if (!hallways.get(i).getName().equals(currNode.h.getName())) {
+                    if (!hallways.get(i).getName().equals(currNode.h.getId())) {
                         frontier.push(new Node(hallways.get(i), currNode, j));
                     }
                 }
