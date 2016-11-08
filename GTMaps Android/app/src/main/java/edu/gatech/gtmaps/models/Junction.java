@@ -5,13 +5,19 @@ import java.util.List;
 public class Junction implements BuildingSpace {
 
     private List<Hallway> hallways;
+    private Point coordinate;
 
-    public Junction(List<Hallway> hallways) {
+    public Junction(List<Hallway> hallways, Point coordinate) {
         this.hallways = hallways;
+        this.coordinate = coordinate;
     }
 
     public List<Hallway> getHallways() {
         return hallways;
+    }
+
+    public Point getCoordinate() {
+        return coordinate;
     }
 
     public String toString() {

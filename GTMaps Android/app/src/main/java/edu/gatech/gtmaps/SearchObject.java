@@ -19,7 +19,7 @@ public class SearchObject {
      * to find target room.
      * @param target The desired room to navigate to.
      * @param start The starting hallway.
-     * @return LinkedList of building spaces to navigate from start to target.
+     * @return LinkedList of building spaces [hallway,Junction,Junction...Junction] to navigate from start to target.
      */
     public static LinkedList<BuildingSpace> find(Room target, BuildingSpace start) {
         //Initialize datastructures/loop variables
@@ -58,7 +58,7 @@ public class SearchObject {
         }
 
         while (currNode != null) {
-            ret.push(currNode.h);
+            ret.push((currNode.j != null) ? currNode.j : currNode.h);
             currNode = currNode.p;
         }
         return ret;
@@ -71,19 +71,27 @@ public class SearchObject {
      */
     public static String translate(LinkedList<BuildingSpace> dir) {
         StringBuilder sb = new StringBuilder();
+        Hallway thisHall = (Hallway) dir.get(0);
+        Hallway nextHall = (Hallway) dir.get(0);
         for (int i = 1; i < dir.size(); i++) {
             BuildingSpace node = dir.get(i);
+            for (Hallway h : ((Junction) node).getHallways()) {
+                if (!h.equals(thisHall)) {
+                    nextHall = h;
+                }
+            }
             String direction = (true) ? "left" : "right"; //replace true with math logic to figure out side hall is on
             sb.append("Turn ");
             sb.append(direction);
             sb.append(" at end of hallway ");
-            sb.append(dir.get(i-1).getName());
+            sb.append(thisHall.getName());
             sb.append(" onto ");
-            sb.append(node.getName());
+            sb.append(nextHall.getName());
             sb.append(".\n");
+            thisHall = nextHall;
         }
         sb.append("Desired room will be on this hallway (");
-        sb.append(dir.getLast().getName());
+        sb.append(thisHall.getName());
         String hall_side = (true) ? "right" : "left"; //replace true with math logic to figure out side room is on
         sb.append(") on the ");
         sb.append(hall_side);

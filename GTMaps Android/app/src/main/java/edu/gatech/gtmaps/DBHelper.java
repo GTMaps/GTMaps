@@ -42,6 +42,8 @@ import java.util.HashMap;
         public static final String JUNCTIONS_TABLE_NAME = "Junctions";
         public static final String JUNCTIONS_HALLWAY_1 = "h_uid1";
         public static final String JUNCTIONS_HALLWAY_2 = "h_uid2";
+        public static final String JUNCTIONS_COORDINATE_X = "h_coordinate_x";
+        public static final String JUNCTIONS_COORDINATE_Y = "h_coordinate_y";
         private HashMap hp;
 
         public DBHelper(Context context)
@@ -110,7 +112,9 @@ import java.util.HashMap;
 
             String CREATE_JUNCTIONS_TABLE = "CREATE TABLE " + JUNCTIONS_TABLE_NAME + "("
                     + JUNCTIONS_HALLWAY_1 + " INTEGER,"
-                    + JUNCTIONS_HALLWAY_2 + " INTEGER," +
+                    + JUNCTIONS_HALLWAY_2 + " INTEGER,"
+                    + JUNCTIONS_COORDINATE_X + " INTEGER,"
+                    + JUNCTIONS_COORDINATE_Y + " INTEGER," +
 
                     //Primary Key = H_uid1, H_uid2
                     "PRIMARY KEY(" + JUNCTIONS_HALLWAY_1 + ", " + JUNCTIONS_HALLWAY_2 + ")," +
