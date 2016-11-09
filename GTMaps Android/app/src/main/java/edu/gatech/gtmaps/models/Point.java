@@ -82,6 +82,15 @@ public class Point {
         return this;
     }
 
+    public boolean equals(Object o) {
+        if (!(o instanceof Point)) {
+            return false;
+        }
+
+        Point p = (Point) o;
+        return p.x == x && p.y == y;
+    }
+
     // P.scale(s,C): scales wrt C: P=L(C,P,s);
 //    Point rotate(float a) {
 //        float dx=x, dy=y, c=cos(a), s=sin(a);

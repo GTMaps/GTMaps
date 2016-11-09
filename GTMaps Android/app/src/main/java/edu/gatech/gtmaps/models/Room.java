@@ -11,10 +11,9 @@ public class Room implements BuildingSpace {
     private Point center;
     private Point door;
     private String room_name;
-    private String room_number;
 
     public Room(String building_id, String floor_id, String hallway_id, HallwaySide hallway_side,
-                String room_id, String room_name, String room_number, Point center, Point door) {
+                String room_id, String room_name, Point center, Point door) {
 
         this.building_id = building_id;
         this.floor_id = floor_id;
@@ -23,7 +22,6 @@ public class Room implements BuildingSpace {
 
         this.room_id = room_id;
         this.room_name = room_name;
-        this.room_number = room_number;
 
         this.center = center;
         this.door = door;
@@ -38,7 +36,6 @@ public class Room implements BuildingSpace {
 
         this.room_id = null;
         this.room_name = "";
-        this.room_number = "";
 
         this.center = null;
         this.door = null;
@@ -82,8 +79,6 @@ public class Room implements BuildingSpace {
 
     public String getRoomName() { return room_name; }
 
-    public String getRoomNumber() { return room_number; }
-
     public String getHallwayId() {
         return hallway_id;
     }
@@ -109,7 +104,7 @@ public class Room implements BuildingSpace {
     }
 
     public String toString() {
-        return "Room: " + room_number + " (" + room_name + ")";
+        return "Room: "  + room_name;
     }
 
 }
