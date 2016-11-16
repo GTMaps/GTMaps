@@ -17,7 +17,7 @@ import edu.gatech.gtmaps.models.Room;
 public class SearchObject {
 
     /**
-     * Performs breadth first search (to be adapted to Greedy Best-First across all the halls/rooms
+     * Performs breadth first search (to be adapted to Greedy Best-First) across all the halls/rooms
      * to find target room.
      * @param target The desired room to navigate to.
      * @param start The starting hallway.
@@ -82,15 +82,19 @@ public class SearchObject {
                     nextHall = h;
                 }
             }
-            boolean isLeftTurn = isLeftTurn(thisHall.getEnd1(),thisHall.getEnd2(),nextHall.getEnd1(),nextHall.getEnd2());
-            String direction = (isLeftTurn) ? "left" : "right"; //replace true with math logic to figure out side hall is on
-            sb.append("Turn ");
-            sb.append(direction);
-            sb.append(" at end of hallway ");
-            sb.append(thisHall.getName());
-            sb.append(" onto ");
-            sb.append(nextHall.getName());
-            sb.append(".\n");
+
+            Point thisEnd = thisHall.getEnd1();
+            Point nextEnd = nextHall.getEnd1();
+            if (!(thisEnd.getX() == nextEnd.getX() || thisEnd.getY() == nextEnd.getY())) {
+                String direction = (true) ? "left" : "right"; //replace true with math logic to figure out side hall is on
+                sb.append("Turn ");
+                sb.append(direction);
+                sb.append(" at end of hallway ");
+                sb.append(thisHall.getName());
+                sb.append(" onto ");
+                sb.append(nextHall.getName());
+                sb.append(".\n");
+            }
             thisHall = nextHall;
         }
         sb.append("Desired room will be on this hallway (");
