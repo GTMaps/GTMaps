@@ -33,6 +33,21 @@ public class Hallway implements BuildingSpace{
         this.end2 = end2;
     }
 
+    public Hallway(){
+        this.id = null;
+        this.building_id = null;
+        this.floor_id = null;
+
+        this.name = "";
+        this.roomsA = null;
+        this.roomsB = null;
+        this.length = 0;
+        this.width = 0;
+        this.junctions = null;
+        this.end1 = null;
+        this.end2 = null;
+    }
+
     public Hallway(String id, String building_id, String floor_id, String name,
                    LinkedList<Room> roomsA, LinkedList<Room> roomsB, double length, double width,
                    List<Junction> junctions, Point end1, Point end2) {
@@ -43,6 +58,47 @@ public class Hallway implements BuildingSpace{
         this.junctions = junctions;
     }
 
+    /* Setters */
+    public void setHallwayName(String name) {this.name = name;}
+
+    public void setHallwayId(String id){this.id = id;}
+
+    public void setBuildingId(String building_id){
+        this.building_id = building_id;
+    }
+
+    public void setFloorId(String floor_id){
+        this.floor_id = floor_id;
+    }
+
+    public void setLength(Double length){
+        this.length = length;
+    }
+
+    public void setWidth(Double width){
+        this.width = width;
+    }
+
+    public void setRoomsA(){
+        //sql call to get rooms A and assign it
+    }
+
+    public void setRoomsB(){
+        //sql call to get rooms B and assign it
+    }
+
+    public void setJunctions(){
+        //sql call to set junctions
+    }
+
+    public void end1(){
+        //sql call to get end1
+    }
+
+    public void end2(){
+        //sql call to get end2
+    }
+
     /* getters */
     public String getName() {
         return name;
@@ -50,6 +106,7 @@ public class Hallway implements BuildingSpace{
 
     public String getId() { return id;}
 
+    //TODO: add sql queries to initially poll for RoomsA and RoomsB from DB
     public List<Room> getRoomsA() { return roomsA; }
 
     public List<Room> getRoomsB() { return roomsB; }
