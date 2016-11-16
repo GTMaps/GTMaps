@@ -84,8 +84,10 @@ public class Hallway implements BuildingSpace{
         switch (side) {
             case SIDE_A:
                 this.roomsA.addAll(rooms);
+                break;
             case SIDE_B:
                 this.roomsB.addAll(rooms);
+                break;
             default:
                 throw new IllegalArgumentException("Character " + side + " not supported.");
         }
