@@ -2,27 +2,38 @@ package edu.gatech.gtmaps.models;
 
 import java.util.List;
 
-public class Junction {
+public class Junction implements BuildingSpace {
 
-    private List<Hall> halls;
+    private List<Hallway> hallways;
+    private Point coordinate;
 
-    public Junction(List<Hall> halls) {
-        this.halls = halls;
-        for (Hall hall : halls) {
-            hall.addJunction(this);
-        }
+    public Junction(List<Hallway> hallways, Point coordinate) {
+        this.hallways = hallways;
+        this.coordinate = coordinate;
     }
 
-    public List<Hall> getHalls() {
-        return halls;
+    public List<Hallway> getHallways() {
+        return hallways;
+    }
+
+    public Point getCoordinate() {
+        return coordinate;
     }
 
     public String toString() {
-        String hallStr = "Connection between halls ";
-        for (Hall hall : halls) {
-            hallStr += hall.toString() + ", ";
+        String hallStr = "Connection between hallways ";
+        for (Hallway hallway : hallways) {
+            hallStr += hallway.toString() + ", ";
         }
         return hallStr.substring(0, hallStr.length() - 2);
     }
 
+    public String getName() {
+        return this.toString();
+    }
+
+    @Override
+    public String getId() {
+        return this.toString();
+    }
 }

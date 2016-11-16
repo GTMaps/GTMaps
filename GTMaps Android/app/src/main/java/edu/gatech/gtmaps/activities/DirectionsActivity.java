@@ -1,6 +1,14 @@
 package edu.gatech.gtmaps.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.PopupMenu;
@@ -10,9 +18,20 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+<<<<<<< HEAD
 import java.util.Arrays;
+=======
+import java.util.LinkedList;
+>>>>>>> origin/master
 
 import edu.gatech.gtmaps.R;
+import edu.gatech.gtmaps.SearchObject;
+import edu.gatech.gtmaps.models.Building;
+import edu.gatech.gtmaps.models.BuildingSpace;
+import edu.gatech.gtmaps.models.Hallway;
+import edu.gatech.gtmaps.models.Room;
+
+import static edu.gatech.gtmaps.SearchObject.find;
 
 public class DirectionsActivity extends AppCompatActivity {
     public String room_message;
@@ -31,10 +50,40 @@ public class DirectionsActivity extends AppCompatActivity {
         TextView text2 = (TextView) findViewById(R.id.building_text);
         text2.setText(building_message);
 
-
-
         ImageView iv = (ImageView)findViewById(R.id.ivfloorplan);
-        iv.setImageResource(R.drawable.ccbfloor);
+
+//        Drawable d = getResources().getDrawable(R.drawable.ccbfloor, getTheme());
+
+//        drawDirections(iv, d.getIntrinsicWidth() - 1, d.getIntrinsicHeight() - 1);
+//        drawDirections(iv, someRoom);
+    }
+
+    private void drawDirections(ImageView iv, Room target, Building building) {
+        BuildingSpace entrance = building.getEntrance();
+        LinkedList<BuildingSpace> route = SearchObject.find(target, entrance);
+
+        for (BuildingSpace hallway : route) {
+            drawDirection(iv, (Hallway) hallway);
+        }
+    }
+
+    private void drawDirection(ImageView iv, Hallway hallway) {
+        // TODO: update floorplan corresponding to the current floor
+        Bitmap floorplan = BitmapFactory.decodeResource(getResources(), R.drawable.ccbfloor);
+        Bitmap direction = Bitmap.createBitmap(floorplan.getWidth(), floorplan.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(direction);
+        canvas.drawBitmap(floorplan, 0, 0, null);
+
+        Paint paint = new Paint();
+        paint.setColor(Color.RED);
+        paint.setStrokeWidth(5);
+        canvas.drawLine(
+                hallway.getEnd1().getX(),
+                hallway.getEnd1().getY(),
+                hallway.getEnd2().getX(),
+                hallway.getEnd2().getY(),
+                paint);
+        iv.setImageDrawable(new BitmapDrawable(getResources(), direction));
     }
 
     public void showPopup(View v) {
