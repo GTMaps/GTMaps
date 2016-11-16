@@ -79,7 +79,7 @@ public class Hallway implements BuildingSpace{
      * @param side Enum side 'A' or 'B' determining which list to add to.
      * @param rooms A list of rooms which is added into the roomsA or roomsB list.
      */
-    public void addRooms(HallwaySide side, List<Room> rooms) throws IllegalAccessException {
+    public void addRooms(HallwaySide side, List<Room> rooms) throws IllegalArgumentException {
         if (rooms.isEmpty()) { return; }
         switch (side) {
             case SIDE_A:
