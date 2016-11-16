@@ -6,6 +6,7 @@ import java.util.List;
 import edu.gatech.gtmaps.models.BuildingSpace;
 import edu.gatech.gtmaps.models.Hallway;
 import edu.gatech.gtmaps.models.Junction;
+import edu.gatech.gtmaps.models.Point;
 import edu.gatech.gtmaps.models.Room;
 
 /**
@@ -80,14 +81,18 @@ public class SearchObject {
                     nextHall = h;
                 }
             }
-            String direction = (true) ? "left" : "right"; //replace true with math logic to figure out side hall is on
-            sb.append("Turn ");
-            sb.append(direction);
-            sb.append(" at end of hallway ");
-            sb.append(thisHall.getName());
-            sb.append(" onto ");
-            sb.append(nextHall.getName());
-            sb.append(".\n");
+            Point thisEnd = thisHall.getEnd1();
+            Point nextEnd = nextHall.getEnd1();
+            if (!(thisEnd.getX() == nextEnd.getX() || thisEnd.getY() == nextEnd.getY())) {
+                String direction = (true) ? "left" : "right"; //replace true with math logic to figure out side hall is on
+                sb.append("Turn ");
+                sb.append(direction);
+                sb.append(" at end of hallway ");
+                sb.append(thisHall.getName());
+                sb.append(" onto ");
+                sb.append(nextHall.getName());
+                sb.append(".\n");
+            }
             thisHall = nextHall;
         }
         sb.append("Desired room will be on this hallway (");
