@@ -16,7 +16,7 @@ public class Building {
     public Building(){
         this.building_id = null;
         this.name = null;
-        this.image_url = "default.png";
+        this.image_url = "default_building.png";
         this.entrances = null;
     }
 

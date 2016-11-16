@@ -51,8 +51,8 @@ public class DirectionsActivity extends AppCompatActivity {
 //        drawDirections(iv, someRoom);
     }
 
-    private void drawDirections(ImageView iv, Room target, Building building) {
-        BuildingSpace entrance = building.getEntrance();
+    private void drawDirections(ImageView iv, Room target, BuildingSpace entrance) {
+        //"Entrance" parameter should be passed in from the user entrance selection in the gallery
         LinkedList<BuildingSpace> route = SearchObject.find(target, entrance);
 
         for (BuildingSpace hallway : route) {
