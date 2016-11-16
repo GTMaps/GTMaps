@@ -71,7 +71,7 @@ public class SearchObject {
      * @param dir LinkedList of BuildingSpace objects which constitute a path to be translated.
      * @return String representing the directions to navigate from the start of dir to the end.
      */
-    public static String translate(LinkedList<BuildingSpace> dir) {
+    public static String translate(LinkedList<BuildingSpace> dir, Room goalRoom) {
         StringBuilder sb = new StringBuilder();
         Hallway thisHall = (Hallway) dir.get(0);
         Hallway nextHall = (Hallway) dir.get(0);
@@ -97,9 +97,13 @@ public class SearchObject {
             }
             thisHall = nextHall;
         }
-        sb.append("Desired room will be on this hallway (");
+        sb.append("Room ");
+        sb.append(goalRoom.getRoomName());
+        sb.append(" will be on this hallway (");
         sb.append(thisHall.getName());
-        String hall_side = (true) ? "right" : "left"; //replace true with math logic to figure out side room is on
+        Point entrySide = thisHall.getEnd1();
+        Point exitSide = thisHall.getEnd2();
+        String hall_side = (isLeftRoom(entrySide,exitSide,goalRoom.getDoor())) ? "left" : "right"; //replace true with math logic to figure out side room is on
         sb.append(") on the ");
         sb.append(hall_side);
         sb.append(" of the hall.\n");
@@ -147,4 +151,27 @@ public class SearchObject {
         return nextHallVec.isLeftTurn(thisHallVec);
     }
 
+    /**
+     * Determines if the room is on the left side of the hall.
+     * @param entrySide The side of the hallway that you enter on.
+     * @param otherSide The other side of this hallway.
+     * @param roomDoor The point representing the doorway of the room.
+     * @return True if the room is on the left of the hall, false otherwise.
+     */
+    private static boolean isLeftRoom(Point entrySide, Point otherSide, Point roomDoor) {
+        int diffX = (int) (entrySide.getX() - otherSide.getX());
+        boolean ret = true;
+        if (diffX < 0) {
+            int roomYhallY = (int) (roomDoor.getY() - entrySide.getY());
+            ret = (roomYhallY > 0);
+        } else if (diffX > 0) {
+            int roomYhallY = (int) (roomDoor.getY() - entrySide.getY());
+            ret = (roomYhallY < 0);
+        } else {
+            int diffY = (int) (entrySide.getY() - otherSide.getY());
+            int roomXhallX = (int) (roomDoor.getX() - entrySide.getX());
+            ret = (diffY < 0) ? (roomXhallX > 0) : (roomXhallX < 0);
+        }
+        return ret;
+    }
 }

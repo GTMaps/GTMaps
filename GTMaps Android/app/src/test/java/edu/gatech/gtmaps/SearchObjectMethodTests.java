@@ -55,7 +55,7 @@ public class SearchObjectMethodTests {
     @Test
     public void simpleSearch_returnsCorrect() {
         LinkedList<BuildingSpace> directions = SearchObject.find(goalRoom, simpleEntry);
-        System.out.println(SearchObject.translate(directions));
+        System.out.println(SearchObject.translate(directions,goalRoom));
         //assertEquals("H1",directions.get(0).getId());
         //assertEquals("H2",directions.get(1).getId());
     }
