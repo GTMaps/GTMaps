@@ -89,7 +89,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
                     // Foreign Keys = B_uid
                     "FOREIGN KEY(" + HALLWAYS_BUILDING_ID + ")"
-                    + "REFERENCES " + BUILDINGS_TABLE_NAME + "(" + BUILDINGS_ID + ")"
+                    + " REFERENCES " + BUILDINGS_TABLE_NAME + "(" + BUILDINGS_ID + ")"
 
                     +")";
             db.execSQL(CREATE_HALLWAYS_TABLE);
@@ -112,28 +112,28 @@ public class DBHelper extends SQLiteOpenHelper {
 
                     // Foreign Keys = B_uid, H_uid
                     "FOREIGN KEY(" + ROOMS_BUILDING_ID + ")"
-                            + "REFERENCES " + BUILDINGS_TABLE_NAME + "(" + BUILDINGS_ID + ")," +
+                            + " REFERENCES " + BUILDINGS_TABLE_NAME + "(" + BUILDINGS_ID + ")," +
                     "FOREIGN KEY(" + ROOMS_HALLWAY_ID + ")"
-                            + "REFERENCES " + HALLWAYS_TABLE_NAME + "(" + HALLWAYS_HALLWAY_ID + ")"
+                            + " REFERENCES " + HALLWAYS_TABLE_NAME + "(" + HALLWAYS_HALLWAY_ID + ")"
 
                     +")";
             db.execSQL(CREATE_ROOMS_TABLE);
 
             String CREATE_JUNCTIONS_TABLE = "CREATE TABLE " + JUNCTIONS_TABLE_NAME + "("
-                    + JUNCTIONS_HALLWAY_1 + " INTEGER,"
-                    + JUNCTIONS_HALLWAY_2 + " INTEGER,"
-                    + JUNCTIONS_COORDINATE_X + " INTEGER,"
-                    + JUNCTIONS_COORDINATE_Y + " INTEGER," +
+                    + JUNCTIONS_HALLWAY_1 + " INTEGER NOT NULL,"
+                    + JUNCTIONS_HALLWAY_2 + " INTEGER NOT NULL,"
+                    + JUNCTIONS_COORDINATE_X + " REAL,"
+                    + JUNCTIONS_COORDINATE_Y + " REAL," +
 
                     //Primary Key = H_uid1, H_uid2
                     "PRIMARY KEY(" + JUNCTIONS_HALLWAY_1 + ", " + JUNCTIONS_HALLWAY_2 + ")," +
 
                     // Foreign Keys = H_uid1, H_uid2
                     "FOREIGN KEY(" + JUNCTIONS_HALLWAY_1 + ")"
-                    + "REFERENCES " + HALLWAYS_TABLE_NAME + "(" + HALLWAYS_HALLWAY_ID + ")," +
+                    + " REFERENCES " + HALLWAYS_TABLE_NAME + "(" + HALLWAYS_HALLWAY_ID + ")," +
 
                     "FOREIGN KEY(" + JUNCTIONS_HALLWAY_2 + ")"
-                    + "REFERENCES " + HALLWAYS_TABLE_NAME + "(" + HALLWAYS_HALLWAY_ID + ")"
+                    + " REFERENCES " + HALLWAYS_TABLE_NAME + "(" + HALLWAYS_HALLWAY_ID + ")"
 
                     + ")";
 
@@ -177,7 +177,9 @@ public class DBHelper extends SQLiteOpenHelper {
             return db.insert(HALLWAYS_TABLE_NAME, null, contentValues) != -1;
         }
 
-        public boolean insertRoom(String room_id, String room_name, String building_id, String floor_id, String hallway_id, String hallway_side, float center_x, float center_y, double door_x, double door_y)
+        public boolean insertRoom(String room_id, String room_name, String building_id,
+                                  String floor_id, String hallway_id, String hallway_side,
+                                  float center_x, float center_y, double door_x, double door_y)
         {
             SQLiteDatabase db = this.getWritableDatabase();
             ContentValues contentValues = new ContentValues();
@@ -198,15 +200,22 @@ public class DBHelper extends SQLiteOpenHelper {
         }
 
         public boolean insertRoom(Room room){
-            //TODO: incomplete
             SQLiteDatabase db = this.getWritableDatabase();
             ContentValues values = new ContentValues();
             values.put(ROOMS_ROOM_ID, room.getRoomId());
             values.put(ROOMS_BUILDING_ID, room.getBuildingId());
             values.put(ROOMS_FLOOR_ID, room.getFloorId());
             values.put(ROOMS_HALLWAY_ID, room.getHallwayId());
-            //values.put(ROOMS_HALLWAY_SIDE);
+            values.put(ROOMS_HALLWAY_SIDE, room.getHallwaySide().toString());
             values.put(ROOMS_ROOM_NAME, room.getRoomName());
+
+            Point door = room.getDoor();
+            values.put(ROOMS_DOOR_X, door.getX());
+            values.put(ROOMS_DOOR_Y, door.getY());
+
+            Point center = room.getCenter();
+            values.put(ROOMS_CENTER_X, center.getX());
+            values.put(ROOMS_CENTER_Y, center.getY());
 
             return db.insert(ROOMS_TABLE_NAME, null, values) != -1;
         }
@@ -245,8 +254,8 @@ public class DBHelper extends SQLiteOpenHelper {
             Cursor cursor =  db.rawQuery(room_query, null);
             cursor.moveToFirst();
 
-            Cursor c = db.rawQuery("Select count(*) from " + ROOMS_TABLE_NAME, null);
-            c.moveToFirst();
+            //Cursor c = db.rawQuery("Select count(*) from " + ROOMS_TABLE_NAME, null);
+            //c.moveToFirst();
 
             /* Map columns to POJO object */
             while (!cursor.isAfterLast())
@@ -274,14 +283,23 @@ public class DBHelper extends SQLiteOpenHelper {
                 room_list.add(room);
                 cursor.moveToNext();
             }
+
+            cursor.close();
             return room_list;
         }
 
     /* Returns all the rooms in a particular building */
     public ArrayList<Room> getRoomsPerBuilding(String building_id) {
-        ArrayList<Room> room_list = new ArrayList<>();
-        room_list = getRoomsPerFloor(building_id, null);
-        return room_list;
+        return getRoomsPerFloor(building_id, null);
+    }
+
+    /* Returns all picture uris for all supported buildings */
+    public String[] getBuildingImage(String building_id) {
+        String[] building_urls = new String[]{"ccbfloor.png",
+                                                "coc.jpg",
+                                                "klaus.jpg",
+                                                "student_center.jpg"};
+        return building_urls;
     }
 }
 
