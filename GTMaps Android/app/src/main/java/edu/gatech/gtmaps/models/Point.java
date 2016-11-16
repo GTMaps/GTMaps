@@ -11,17 +11,17 @@ public class Point {
     public Point(float px, float py) {
         x = px;
         y = py;
-    };
+    }
     Point setTo(float px, float py) {
         x = px;
         y = py;
         return this;
-    };
+    }
     Point setTo(Point P) {
         x = P.x;
         y = P.y;
         return this;
-    };
+    }
 
     public float getX(){
         return this.x;
@@ -45,12 +45,12 @@ public class Point {
         x += P.x;
         y += P.y;
         return this;
-    };                              // incorrect notation, but useful for computing weighted averages
+    }                          // incorrect notation, but useful for computing weighted averages
     Point add(float s, Point P) {
         x += s*P.x;
         y += s*P.y;
         return this;
-    };               // adds s*P
+    }               // adds s*P
     Point add(Vec V) {
         x += V.x;
         y += V.y;
@@ -65,12 +65,12 @@ public class Point {
         x+=s*(P.x-x);
         y+=s*(P.y-y);
         return this;
-    };  // transalte by ratio s towards P
+    }  // transalte by ratio s towards P
     Point scale(float u, float v) {
         x*=u;
         y*=v;
         return this;
-    };
+    }
     Point scale(float s) {
         x*=s;
         y*=s;
@@ -90,7 +90,13 @@ public class Point {
         Point p = (Point) o;
         return p.x == x && p.y == y;
     }
-
+    // measure
+    public double d(Point P, Point Q) {
+        return Math.sqrt(d2(P, Q));
+    };                                                       // ||AB|| (Distance)
+    public float d2(Point P, Point Q) {
+        return (Q.x-P.x)*(Q.x-P.x)+(Q.y-P.y)*(Q.y-P.y);
+    }
     // P.scale(s,C): scales wrt C: P=L(C,P,s);
 //    Point rotate(float a) {
 //        float dx=x, dy=y, c=cos(a), s=sin(a);

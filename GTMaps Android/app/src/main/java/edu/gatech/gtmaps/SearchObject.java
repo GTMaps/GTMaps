@@ -6,6 +6,8 @@ import java.util.List;
 import edu.gatech.gtmaps.models.BuildingSpace;
 import edu.gatech.gtmaps.models.Hallway;
 import edu.gatech.gtmaps.models.Junction;
+import edu.gatech.gtmaps.models.Point;
+import edu.gatech.gtmaps.models.Vec;
 import edu.gatech.gtmaps.models.Room;
 
 /**
@@ -80,7 +82,8 @@ public class SearchObject {
                     nextHall = h;
                 }
             }
-            String direction = (true) ? "left" : "right"; //replace true with math logic to figure out side hall is on
+            boolean isLeftTurn = isLeftTurn(thisHall.getEnd1(),thisHall.getEnd2(),nextHall.getEnd1(),nextHall.getEnd2());
+            String direction = (isLeftTurn) ? "left" : "right"; //replace true with math logic to figure out side hall is on
             sb.append("Turn ");
             sb.append(direction);
             sb.append(" at end of hallway ");
@@ -109,4 +112,34 @@ public class SearchObject {
             j = connector;
         }
     }
+    //let a, b belong to thishall and c,d belong to nexthall
+    public static boolean isLeftTurn(Point a, Point b, Point c, Point d) {
+        Point connectingP1 =a, connectingP2 = c;
+        double ac = a.d(a,c);
+        double ad = a.d(a,d);
+        double bc = b.d(b,c);
+        double bd = b.d(b,d);
+        double min = ac;
+        if(ad < min) {
+            min = ad;
+            connectingP1 = a;
+            connectingP2 = c;
+        }
+        if(bc < min) {
+            min = bc;
+            connectingP1 = b;
+            connectingP2 = c;
+        }
+        if(bd < min) {
+            min = bd;
+            connectingP1 = b;
+            connectingP2 = d;
+        }
+        Point startingP1 = (connectingP1==b) ? a:b;
+        Point startingP2 = (connectingP2==d) ? c:d;
+        Vec thisHallVec = new Vec(startingP1, connectingP1);
+        Vec nextHallVec = new Vec(startingP2, connectingP2);
+        return nextHallVec.isLeftTurn(thisHallVec);
+    }
+
 }
