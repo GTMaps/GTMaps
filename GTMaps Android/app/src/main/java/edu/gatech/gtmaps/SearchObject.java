@@ -86,7 +86,7 @@ public class SearchObject {
             Point thisEnd = thisHall.getEnd1();
             Point nextEnd = nextHall.getEnd1();
             if (!(thisEnd.getX() == nextEnd.getX() || thisEnd.getY() == nextEnd.getY())) {
-                String direction = (true) ? "left" : "right"; //replace true with math logic to figure out side hall is on
+                String direction = (isLeftTurn(thisHall.getEnd1(),thisHall.getEnd2(),nextHall.getEnd1(),nextHall.getEnd2())) ? "left" : "right"; //replace true with math logic to figure out side hall is on
                 sb.append("Turn ");
                 sb.append(direction);
                 sb.append(" at end of hallway ");
