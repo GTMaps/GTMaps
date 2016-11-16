@@ -76,7 +76,7 @@ public class Hallway implements BuildingSpace{
 
     /**
      * Adds a set of rooms to one side of this hallway.
-     * @param side Character 'A' or 'B' determining which list to add to.
+     * @param side Enum side 'A' or 'B' determining which list to add to.
      * @param rooms A list of rooms which is added into the roomsA or roomsB list.
      */
     public void addRooms(HallwaySide side, List<Room> rooms) throws IllegalAccessException {

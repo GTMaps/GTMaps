@@ -15,7 +15,7 @@ import edu.gatech.gtmaps.models.Room;
 public class SearchObject {
 
     /**
-     * Performs breadth first search (to be adapted to Greedy Best-First across all the halls/rooms
+     * Performs breadth first search (to be adapted to Greedy Best-First) across all the halls/rooms
      * to find target room.
      * @param target The desired room to navigate to.
      * @param start The starting hallway.
