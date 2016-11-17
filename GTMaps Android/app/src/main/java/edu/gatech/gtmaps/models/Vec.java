@@ -14,6 +14,9 @@ public Vec(Point P, Point Q) {
         x = Q.x-P.x;
         y = Q.y-P.y;
     }
+    public void printVec() {
+        System.out.println("vec x: "+x+"vec y: "+y);
+    }
     // MODIFY
     Vec setTo(float px, float py) {
         x = px;

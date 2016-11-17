@@ -139,10 +139,11 @@ public class SearchObject {
             connectingP1 = b;
             connectingP2 = d;
         }
+
         Point startingP1 = (connectingP1==b) ? a:b;
-        Point startingP2 = (connectingP2==d) ? c:d;
+        Point endP2 = (connectingP2==d) ? c:d;
         Vec thisHallVec = new Vec(startingP1, connectingP1);
-        Vec nextHallVec = new Vec(startingP2, connectingP2);
+        Vec nextHallVec = new Vec(connectingP2,endP2);
         return nextHallVec.isLeftTurn(thisHallVec);
     }
 
