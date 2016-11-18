@@ -29,16 +29,6 @@
             android:layout_alignParentEnd="false"
             android:layout_alignParentRight="false"/>
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Get Directions"
-            android:id="@+id/button2"
-            android:layout_alignTop="@+id/room_choice"
-            android:layout_marginTop="50dp"
-            android:onClick="roomSearch"
-            android:layout_centerHorizontal="true"/>
-
         <android.support.v7.widget.Toolbar
             android:layout_height="wrap_content"
             android:background="@android:color/holo_blue_dark"
@@ -85,6 +75,27 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Get Directions"
+            android:id="@+id/button2"
+            android:layout_marginTop="48dp"
+            android:onClick="roomSearch"
+            android:layout_below="@+id/ivbuilding"
+            android:layout_alignLeft="@+id/room_choice"
+            android:layout_alignStart="@+id/room_choice" />
+
+        <Button
+            android:text="See Room List"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/button2"
+            android:layout_alignBottom="@+id/button2"
+            android:layout_alignRight="@+id/room_choice"
+            android:layout_alignEnd="@+id/room_choice"
+            android:id="@+id/room_list" />
 
     </RelativeLayout>
 </RelativeLayout>

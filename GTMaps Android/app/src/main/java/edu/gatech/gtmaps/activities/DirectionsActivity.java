@@ -17,12 +17,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-<<<<<<< HEAD
 import java.util.Arrays;
-=======
 import java.util.LinkedList;
->>>>>>> origin/master
 
 import edu.gatech.gtmaps.R;
 import edu.gatech.gtmaps.SearchObject;
