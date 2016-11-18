@@ -1,0 +1,4 @@
+CoordinateFinder is a processing project.
+To find coordinates on a map, put the map image in the data folder and name it as "pic.jpg" (which would replace the previous image file). Once the app is running, click on the points you want to recorder. The point coordinates will be stored in data/pts and data/roomPts.
+data/pts and data/roomPts contain the same points. The CoordinateFinder program uses data/pts to show points on screen. data/roomPts would not affect the running of the program. User could manipulate data/roomPts as they want(such as add markers before coordinate).
+A good way to use the project is to record a hallway at one time. Then add room numbers in data/roomPts. Then clear all data in data/pts and put "0" in the file (0 stands for the number of point currently in the file). Save the files and continue to the next hallway.
