@@ -6,6 +6,8 @@ import java.util.List;
 import edu.gatech.gtmaps.models.BuildingSpace;
 import edu.gatech.gtmaps.models.Hallway;
 import edu.gatech.gtmaps.models.Junction;
+import edu.gatech.gtmaps.models.Point;
+import edu.gatech.gtmaps.models.Vec;
 import edu.gatech.gtmaps.models.Room;
 
 /**
@@ -15,7 +17,7 @@ import edu.gatech.gtmaps.models.Room;
 public class SearchObject {
 
     /**
-     * Performs breadth first search (to be adapted to Greedy Best-First across all the halls/rooms
+     * Performs breadth first search (to be adapted to Greedy Best-First) across all the halls/rooms
      * to find target room.
      * @param target The desired room to navigate to.
      * @param start The starting hallway.
@@ -69,7 +71,7 @@ public class SearchObject {
      * @param dir LinkedList of BuildingSpace objects which constitute a path to be translated.
      * @return String representing the directions to navigate from the start of dir to the end.
      */
-    public static String translate(LinkedList<BuildingSpace> dir) {
+    public static String translate(LinkedList<BuildingSpace> dir, Room goalRoom) {
         StringBuilder sb = new StringBuilder();
         Hallway thisHall = (Hallway) dir.get(0);
         Hallway nextHall = (Hallway) dir.get(0);
@@ -80,19 +82,28 @@ public class SearchObject {
                     nextHall = h;
                 }
             }
-            String direction = (true) ? "left" : "right"; //replace true with math logic to figure out side hall is on
-            sb.append("Turn ");
-            sb.append(direction);
-            sb.append(" at end of hallway ");
-            sb.append(thisHall.getName());
-            sb.append(" onto ");
-            sb.append(nextHall.getName());
-            sb.append(".\n");
+
+            Point thisEnd = thisHall.getEnd1();
+            Point nextEnd = nextHall.getEnd1();
+            if (!(thisEnd.getX() == nextEnd.getX() || thisEnd.getY() == nextEnd.getY())) {
+                String direction = (isLeftTurn(thisHall.getEnd1(),thisHall.getEnd2(),nextHall.getEnd1(),nextHall.getEnd2())) ? "left" : "right"; //replace true with math logic to figure out side hall is on
+                sb.append("Turn ");
+                sb.append(direction);
+                sb.append(" at end of hallway ");
+                sb.append(thisHall.getName());
+                sb.append(" onto ");
+                sb.append(nextHall.getName());
+                sb.append(".\n");
+            }
             thisHall = nextHall;
         }
-        sb.append("Desired room will be on this hallway (");
+        sb.append("Room ");
+        sb.append(goalRoom.getRoomName());
+        sb.append(" will be on this hallway (");
         sb.append(thisHall.getName());
-        String hall_side = (true) ? "right" : "left"; //replace true with math logic to figure out side room is on
+        Point entrySide = thisHall.getEnd1();
+        Point exitSide = thisHall.getEnd2();
+        String hall_side = (isLeftRoom(entrySide,exitSide,goalRoom.getDoor())) ? "left" : "right"; //replace true with math logic to figure out side room is on
         sb.append(") on the ");
         sb.append(hall_side);
         sb.append(" of the hall.\n");
@@ -108,5 +119,59 @@ public class SearchObject {
             p = previousHallway;
             j = connector;
         }
+    }
+    //let a, b belong to thishall and c,d belong to nexthall
+    public static boolean isLeftTurn(Point a, Point b, Point c, Point d) {
+        Point connectingP1 =a, connectingP2 = c;
+        double ac = a.d(a,c);
+        double ad = a.d(a,d);
+        double bc = b.d(b,c);
+        double bd = b.d(b,d);
+        double min = ac;
+        if(ad < min) {
+            min = ad;
+            connectingP1 = a;
+            connectingP2 = c;
+        }
+        if(bc < min) {
+            min = bc;
+            connectingP1 = b;
+            connectingP2 = c;
+        }
+        if(bd < min) {
+            min = bd;
+            connectingP1 = b;
+            connectingP2 = d;
+        }
+
+        Point startingP1 = (connectingP1==b) ? a:b;
+        Point endP2 = (connectingP2==d) ? c:d;
+        Vec thisHallVec = new Vec(startingP1, connectingP1);
+        Vec nextHallVec = new Vec(connectingP2,endP2);
+        return nextHallVec.isLeftTurn(thisHallVec);
+    }
+
+    /**
+     * Determines if the room is on the left side of the hall.
+     * @param entrySide The side of the hallway that you enter on.
+     * @param otherSide The other side of this hallway.
+     * @param roomDoor The point representing the doorway of the room.
+     * @return True if the room is on the left of the hall, false otherwise.
+     */
+    private static boolean isLeftRoom(Point entrySide, Point otherSide, Point roomDoor) {
+        int diffX = (int) (entrySide.getX() - otherSide.getX());
+        boolean ret = true;
+        if (diffX < 0) {
+            int roomYhallY = (int) (roomDoor.getY() - entrySide.getY());
+            ret = (roomYhallY > 0);
+        } else if (diffX > 0) {
+            int roomYhallY = (int) (roomDoor.getY() - entrySide.getY());
+            ret = (roomYhallY < 0);
+        } else {
+            int diffY = (int) (entrySide.getY() - otherSide.getY());
+            int roomXhallX = (int) (roomDoor.getX() - entrySide.getX());
+            ret = (diffY < 0) ? (roomXhallX > 0) : (roomXhallX < 0);
+        }
+        return ret;
     }
 }

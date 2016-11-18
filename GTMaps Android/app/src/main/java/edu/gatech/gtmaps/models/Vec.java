@@ -10,18 +10,24 @@ public class Vec {
         x = px;
         y = py;
     };
-
+public Vec(Point P, Point Q) {
+        x = Q.x-P.x;
+        y = Q.y-P.y;
+    }
+    public void printVec() {
+        System.out.println("vec x: "+x+"vec y: "+y);
+    }
     // MODIFY
     Vec setTo(float px, float py) {
         x = px;
         y = py;
         return this;
-    };
+    }
     Vec setTo(Vec V) {
         x = V.x;
         y = V.y;
         return this;
-    };
+    }
     Vec zero() {
         x=0;
         y=0;
@@ -31,50 +37,50 @@ public class Vec {
         x*=u;
         y*=v;
         return this;
-    };
+    }
     Vec scaleBy(float f) {
         x*=f;
         y*=f;
         return this;
-    };
+    }
     Vec reverse() {
         x=-x;
         y=-y;
         return this;
-    };
+    }
     Vec divideBy(float f) {
         x/=f;
         y/=f;
         return this;
-    };
+    }
     Vec normalize() {
         double n=Math.sqrt(x*x+y*y);
         if (n>0.000001) {
             x/=n;
             y/=n;
-        };
+        }
         return this;
-    };
+    }
     Vec add(float u, float v) {
         x += u;
         y += v;
         return this;
-    };
+    }
     Vec add(Vec V) {
         x += V.x;
         y += V.y;
         return this;
-    };
+    }
     Vec add(float s, Vec V) {
         x += s*V.x;
         y += s*V.y;
         return this;
-    };
+    }
 
     //left this be the current forward direction
     //If this method returns true, the turn is a left turn.
     //Else it is a right turn
-    boolean isLeftTurn(Vec prevForwardDirection) {
+    public boolean isLeftTurn(Vec prevForwardDirection) {
         return det(prevForwardDirection,this) > 0;
     }
     //a here is in radian, rotate in clockwise
@@ -83,7 +89,7 @@ public class Vec {
         x= (float) (xx*Math.cos(a)-yy*Math.sin(a));
         y= (float) (xx*Math.sin(a)+yy*Math.cos(a));
         return this;
-    };
+    }
 
     float dot(Vec U, Vec V) {
         return U.x*V.x+U.y*V.y;
@@ -94,14 +100,14 @@ public class Vec {
 
     Vec R(Vec V) {
         return new Vec(-V.y, V.x);
-    };                                                             // V turned 90 degrees (clockwise)
+    }                                                            // V turned 90 degrees (clockwise)
 
     Vec left() {
         float m=x;
         x=-y;
         y=m;
         return this;
-    };
+    }
 
 //    // OUTPUT VEC
 //    Vec clone() {
@@ -122,7 +128,7 @@ public class Vec {
     // DRAW, PRINT
     void write() {
         System.out.println("<"+x+","+y+">");
-    };
+    }
 //    void showAt (pt P) {
 //        line(P.x, P.y, P.x+x, P.y+y);
 //    };
