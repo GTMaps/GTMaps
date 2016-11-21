@@ -1,4 +1,5 @@
 package edu.gatech.gtmaps;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -6,7 +7,6 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.Shadows;
 import org.robolectric.shadows.ShadowApplication;
-
 import java.util.ArrayList;
 
 import edu.gatech.gtmaps.models.BuildingSpace;
@@ -110,6 +110,25 @@ public class DBHelperTest {
                 fail();
             }
         }
+    }
+
+    @Test
+    public void testPopulateData() {
+        ShadowApplication context = Shadows.shadowOf(RuntimeEnvironment.application);
+        dbHelper = new DBHelper(context.getApplicationContext());
+
+        dbHelper.populateData();
+        assertEquals(3, dbHelper.getAllBuildings().size());
+        assertEquals(9, dbHelper.getHallwaysPerFloor("0", "floor_1").size());
+        assertEquals(80, dbHelper.getRoomsPerBuilding("0").size());
+
+        ArrayList<String> actual = new ArrayList<>();
+        actual.add("coc.jpg");
+        actual.add("klaus.jpg");
+        actual.add("student_center.jpg");
+        assertEquals(actual, dbHelper.getAllBuildingUrls());
+
+        assertEquals("ccbfloor.png", dbHelper.getFloorUrl("0", "floor_1"));
     }
 
     private void assertRoomsEqual(Room expected, Room actual) {

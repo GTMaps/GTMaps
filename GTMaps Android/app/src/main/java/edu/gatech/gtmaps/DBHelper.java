@@ -7,8 +7,14 @@ import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import org.yaml.snakeyaml.Yaml;
+
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import edu.gatech.gtmaps.models.Building;
 import edu.gatech.gtmaps.models.BuildingSpace;
@@ -44,8 +50,10 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String HALLWAYS_FLOOR_ID = "f_id";
     public static final String HALLWAYS_HALLWAY_ID = "h_uid";
     public static final String HALLWAYS_HALLWAY_NAME = "h_name";
-    public static final String HALLWAYS_CENTER_X = "center_x";
-    public static final String HALLWAYS_CENTER_Y = "center_y";
+    public static final String HALLWAYS_END1_X = "end1_x";
+    public static final String HALLWAYS_END1_Y = "end1_y";
+    public static final String HALLWAYS_END2_X = "end2_x";
+    public static final String HALLWAYS_END2_Y = "end2_y";
     public static final String HALLWAYS_LENGTH = "length";
     public static final String HALLWAYS_WIDTH = "width";
 
@@ -54,6 +62,12 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String JUNCTIONS_HALLWAY_2 = "h_uid2";
     public static final String JUNCTIONS_COORDINATE_X = "h_coordinate_x";
     public static final String JUNCTIONS_COORDINATE_Y = "h_coordinate_y";
+
+    public static final String FLOORS_TABLE_NAME = "Floors";
+    public static final String FLOORS_ID = "id";
+    public static final String FLOORS_BUILDING_ID = "b_uid";
+    public static final String FLOORS_URL = "url";
+
     private HashMap hp;
 
     public DBHelper(Context context)
@@ -81,8 +95,10 @@ public class DBHelper extends SQLiteOpenHelper {
                 + HALLWAYS_HALLWAY_ID + " TEXT NOT NULL,"
                 + HALLWAYS_HALLWAY_NAME + " TEXT,"
 
-                + HALLWAYS_CENTER_X + " REAL," // ?? same question as room table
-                + HALLWAYS_CENTER_Y + " REAL,"
+                + HALLWAYS_END1_X + " REAL,"
+                + HALLWAYS_END1_Y + " REAL,"
+                + HALLWAYS_END2_X + " REAL,"
+                + HALLWAYS_END2_Y + " REAL,"
                 + HALLWAYS_LENGTH+ " REAL,"
                 + HALLWAYS_WIDTH+ " REAL," +
 
@@ -109,8 +125,9 @@ public class DBHelper extends SQLiteOpenHelper {
                 + ROOMS_DOOR_X + " REAL,"
                 + ROOMS_DOOR_Y + " REAL," +
 
-                //Primary Key = B_uid,F_id,door_x,door_y
-                "PRIMARY KEY(" + ROOMS_BUILDING_ID + ", " + ROOMS_FLOOR_ID + "," + ROOMS_DOOR_X + "," + ROOMS_DOOR_Y + ")," +
+                //Primary Key = B_uid,F_id,door_x,door_y -> Yvonne changed it to room_id bec
+                // instances like staircase without a door are causing problems
+                "PRIMARY KEY(" + ROOMS_ROOM_ID + ")," +
 
                 // Foreign Keys = B_uid, H_uid
                 "FOREIGN KEY(" + ROOMS_BUILDING_ID + ")"
@@ -140,6 +157,112 @@ public class DBHelper extends SQLiteOpenHelper {
                 + ")";
 
         db.execSQL(CREATE_JUNCTIONS_TABLE);
+
+        String CREATE_FLOORS_TABLE = "CREATE TABLE " + FLOORS_TABLE_NAME + "("
+                + FLOORS_ID + " TEXT NOT NULL,"
+                + FLOORS_BUILDING_ID + " TEXT NOT NULL,"
+                + FLOORS_URL + " TEXT NOT NULL," +
+
+                // Primary Key = B_uid, F_id
+                "PRIMARY KEY(" + FLOORS_BUILDING_ID + ", " + FLOORS_ID + ")," +
+
+                // Foreign Key = B_uid
+                "FOREIGN KEY(" + FLOORS_BUILDING_ID + ")"
+                + " REFERENCES " + BUILDINGS_TABLE_NAME + "(" + BUILDINGS_ID + ")"
+
+                + ")";
+
+        db.execSQL(CREATE_FLOORS_TABLE);
+    }
+
+    public void populateData() {
+        SQLiteDatabase db = getWritableDatabase();
+
+        Map<String, List> map = null;
+        Yaml yaml = new Yaml();
+        try {
+            InputStream is = DBHelper.class.getClassLoader().getResourceAsStream("RoomCoords_CoC.yaml");
+            map = (Map<String, List>) yaml.load(is);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        populateBuildings(map);
+    }
+
+    private void populateBuildings(Map<String, List> map) {
+        for (Map.Entry<String, List> buildingEntry : map.entrySet()) {
+            String buildingName = buildingEntry.getKey();
+            List<Map> buildingAttributes = buildingEntry.getValue();
+            String buildingId = buildingAttributes.get(0).get("id").toString();
+            insertBuilding(buildingId, buildingEntry.getKey(), (String) buildingAttributes.get(1).get("url"));
+
+            if (buildingAttributes.size() == 2) {
+                continue;
+            }
+            for (int i = 2; i < buildingAttributes.size(); i++) {
+                Map<String, List> floor = buildingAttributes.get(i);
+                for (Map.Entry<String, List> floorEntry : floor.entrySet()) {
+                    String floorId = floorEntry.getKey();
+                    String url = ((Map<String, String>) floorEntry.getValue().get(0)).get("url");
+                    insertFloor(floorId, buildingId, url);
+
+                    List<Map> hallways = floorEntry.getValue().subList(1, floorEntry.getValue().size());
+                    populateHallways(hallways, buildingId, floorId);
+                }
+            }
+        }
+    }
+
+    private void populateHallways(List<Map> hallways, String buildingId, String floorId) {
+        for (Map<String, List> hallway : hallways) {
+            for (Map.Entry<String, List> hallwayEntry : hallway.entrySet()) {
+                String hallwayName = hallwayEntry.getKey();
+                List<Map> hallwayAttributes = hallwayEntry.getValue();
+                String hallwayId = hallwayAttributes.get(0).get("id").toString();
+                insertHallway(hallwayId, hallwayName, buildingId, floorId,
+                        parseFloat(hallwayAttributes.get(1).get("end1_x").toString()),
+                        parseFloat(hallwayAttributes.get(2).get("end1_y").toString()),
+                        parseFloat(hallwayAttributes.get(3).get("end2_x").toString()),
+                        parseFloat(hallwayAttributes.get(4).get("end2_y").toString()),
+                        parseFloat(hallwayAttributes.get(5).get("length").toString()),
+                        parseFloat(hallwayAttributes.get(6).get("width").toString()));
+
+                populateRooms(hallwayAttributes, buildingId, floorId, hallwayId);
+            }
+        }
+    }
+
+    private void populateRooms(List<Map> hallwayAttributes, String buildingId, String floorId,
+                               String hallwayId) {
+        for (int i = 7; i < hallwayAttributes.size(); i++) {
+            Map<Object, List> room = hallwayAttributes.get(i);
+            for (Map.Entry<Object, List> roomEntry : room.entrySet()) {
+                String roomName = roomEntry.getKey().toString();
+                List<Collection> roomAttributes = roomEntry.getValue();
+                String roomId = ((Map) roomAttributes.get(0)).get("id").toString();
+                String side = (String) ((Map) roomAttributes.get(1)).get("side");
+
+                float center_x = 0, center_y = 0;
+                for (int j = 2; j <= 5; j++) {
+                    List<Double> point = (List) roomAttributes.get(j);
+                    center_x += point.get(0);
+                    center_y += point.get(1);
+                }
+                center_x /= 4;
+                center_y /= 4;
+
+                float door_x = 0, door_y = 0;
+                if (roomAttributes.size() == 7) {
+                    List<Double> point = (List) roomAttributes.get(6);
+                    door_x += point.get(0);
+                    door_y += point.get(1);
+                }
+
+                insertRoom(roomId, roomName, buildingId, floorId, hallwayId, side,
+                        center_x, center_y, door_x, door_y);
+            }
+        }
     }
 
     @Override
@@ -167,6 +290,13 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public boolean insertHallway(String hallway_id, String hallway_name, String building_id, String floor_id)
     {
+        return insertHallway(hallway_id, hallway_name, building_id, floor_id, 0, 0, 0, 0, 0, 0);
+    }
+
+    public boolean insertHallway(String hallway_id, String hallway_name, String building_id,
+                                 String floor_id, float end1_x, float end1_y, float end2_x, float end2_y,
+                                 float length, float width)
+    {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(HALLWAYS_HALLWAY_ID, hallway_id);
@@ -175,6 +305,12 @@ public class DBHelper extends SQLiteOpenHelper {
         contentValues.put(HALLWAYS_BUILDING_ID, building_id);
         contentValues.put(HALLWAYS_FLOOR_ID, floor_id);
         contentValues.put(HALLWAYS_HALLWAY_ID, hallway_id);
+        contentValues.put(HALLWAYS_END1_X, end1_x);
+        contentValues.put(HALLWAYS_END1_Y, end1_y);
+        contentValues.put(HALLWAYS_END2_X, end2_x);
+        contentValues.put(HALLWAYS_END2_Y, end2_y);
+        contentValues.put(HALLWAYS_LENGTH, length);
+        contentValues.put(HALLWAYS_WIDTH, width);
 
         return db.insert(HALLWAYS_TABLE_NAME, null, contentValues) != -1;
     }
@@ -230,6 +366,17 @@ public class DBHelper extends SQLiteOpenHelper {
         contentValues.put(JUNCTIONS_HALLWAY_2, hallway_id2);
 
         return db.insert(JUNCTIONS_TABLE_NAME, null, contentValues) != -1;
+    }
+
+    public boolean insertFloor(String floor_id, String building_id, String url) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(FLOORS_ID, floor_id);
+        contentValues.put(FLOORS_BUILDING_ID, building_id);
+        contentValues.put(FLOORS_URL, url);
+
+        return db.insert(FLOORS_TABLE_NAME, null, contentValues) != -1;
     }
 
     /***************************  SQL Select Queries (DB "Getters") *******************************/
@@ -442,20 +589,55 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     /* Returns all picture uris for all supported buildings */
-    public String[] getAllBuildingUrls() {
-        /* TODO: insert sql query here */
-        String[] building_urls = new String[]{"ccbfloor.png",
-                                                "coc.jpg",
-                                                "klaus.jpg",
-                                                "student_center.jpg"};
-        return building_urls;
+    public ArrayList<String> getAllBuildingUrls() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        ArrayList<String> urls = new ArrayList<>();
+
+        String query = "SELECT " + BUILDINGS_URL
+                + " FROM " + BUILDINGS_TABLE_NAME;
+
+        Cursor cursor = db.rawQuery(query, null);
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast()) {
+            urls.add(cursor.getString(0));
+            cursor.moveToNext();
+        }
+
+        cursor.close();
+        return urls;
+
     }
 
-    public String getBuildingUrl(String building_id){
-        /* TODO: insert sql query here */
-        String building_url = "coc.jpg";
+    public String getBuildingUrl(String building_id) {
+        SQLiteDatabase db = this.getReadableDatabase();
 
-        return building_url;
+        /* Select rooms query */
+        String query = "SELECT " + BUILDINGS_URL +
+                " FROM " + BUILDINGS_TABLE_NAME +
+                " WHERE " + BUILDINGS_ID + "='" + building_id + "'";
+
+        Cursor cursor =  db.rawQuery(query, null);
+        cursor.moveToFirst();
+        String url = cursor.getString(0);
+        cursor.close();
+        return url;
+    }
+
+    public String getFloorUrl(String building_id, String floor_id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        /* Select rooms query */
+        String query = "SELECT " + FLOORS_URL +
+                " FROM " + FLOORS_TABLE_NAME +
+                " WHERE " + FLOORS_BUILDING_ID + "='" + building_id + "'" +
+                " AND " + FLOORS_ID + "='" + floor_id + "'";
+
+        Cursor cursor =  db.rawQuery(query, null);
+        cursor.moveToFirst();
+        String url = cursor.getString(0);
+        cursor.close();
+        return url;
     }
 }
 
