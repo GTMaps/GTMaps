@@ -73,8 +73,10 @@ public class SearchObject {
      */
     public static String translate(LinkedList<BuildingSpace> dir, Room goalRoom) {
         StringBuilder sb = new StringBuilder();
+        LinkedList<Hallway> halls = new LinkedList<>();
         Hallway thisHall = (Hallway) dir.get(0);
         Hallway nextHall = (Hallway) dir.get(0);
+        halls.add(thisHall);
         for (int i = 1; i < dir.size(); i++) {
             BuildingSpace node = dir.get(i);
             for (Hallway h : ((Junction) node).getHallways()) {
@@ -86,7 +88,7 @@ public class SearchObject {
             Point thisEnd = thisHall.getEnd1();
             Point nextEnd = nextHall.getEnd1();
             if (!(thisEnd.getX() == nextEnd.getX() || thisEnd.getY() == nextEnd.getY())) {
-                String direction = (isLeftTurn(thisHall.getEnd1(),thisHall.getEnd2(),nextHall.getEnd1(),nextHall.getEnd2())) ? "left" : "right"; //replace true with math logic to figure out side hall is on
+                String direction = (isLeftTurn(thisHall.getEnd1(),thisHall.getEnd2(),nextHall.getEnd1(),nextHall.getEnd2())) ? "left" : "right";
                 sb.append("Turn ");
                 sb.append(direction);
                 sb.append(" at end of hallway ");
@@ -96,14 +98,16 @@ public class SearchObject {
                 sb.append(".\n");
             }
             thisHall = nextHall;
+            halls.add(thisHall);
         }
+        Hallway lastHall = halls.getLast();
+        Hallway penultimate = halls.get(halls.size() - 2);
         sb.append("Room ");
         sb.append(goalRoom.getRoomName());
         sb.append(" will be on this hallway (");
-        sb.append(thisHall.getName());
-        Point entrySide = thisHall.getEnd1();
-        Point exitSide = thisHall.getEnd2();
-        String hall_side = (isLeftRoom(entrySide,exitSide,goalRoom.getDoor())) ? "left" : "right"; //replace true with math logic to figure out side room is on
+        sb.append(lastHall.getName());
+
+        String hall_side = (isLeftRoom(lastHall.getEnd1(), lastHall.getEnd2(), penultimate.getEnd1(), penultimate.getEnd2(),goalRoom.getDoor())) ? "left" : "right";
         sb.append(") on the ");
         sb.append(hall_side);
         sb.append(" of the hall.\n");
@@ -153,12 +157,37 @@ public class SearchObject {
 
     /**
      * Determines if the room is on the left side of the hall.
-     * @param entrySide The side of the hallway that you enter on.
-     * @param otherSide The other side of this hallway.
+     * @param lasthallEnd1 Side one of the last hallway.
+     * @param lasthallEnd2 Side two of the last hallway.
+     * @param prevhallEnd1 Side one of the penultimate hallway.
+     * @param prevhallEnd2 Side two of the penultimate hallway.
      * @param roomDoor The point representing the doorway of the room.
      * @return True if the room is on the left of the hall, false otherwise.
      */
-    private static boolean isLeftRoom(Point entrySide, Point otherSide, Point roomDoor) {
+    private static boolean isLeftRoom(Point lasthallEnd1, Point lasthallEnd2, Point prevhallEnd1, Point prevhallEnd2, Point roomDoor) {
+        Point entrySide = lasthallEnd1;
+        Point otherSide = lasthallEnd2;
+        double ac = lasthallEnd1.d(lasthallEnd1,prevhallEnd1);
+        double ad = lasthallEnd1.d(lasthallEnd1,prevhallEnd2);
+        double bc = lasthallEnd2.d(lasthallEnd2,prevhallEnd1);
+        double bd = lasthallEnd2.d(lasthallEnd2,prevhallEnd2);
+        double min = ac;
+        if(ad < min) {
+            min = ad;
+            entrySide = lasthallEnd1;
+            otherSide = lasthallEnd2;
+        }
+        if(bc < min) {
+            min = bc;
+            entrySide = lasthallEnd2;
+            otherSide = lasthallEnd1;
+        }
+        if(bd < min) {
+            min = bd;
+            entrySide = lasthallEnd2;
+            otherSide = lasthallEnd1;
+        }
+
         int diffX = (int) (entrySide.getX() - otherSide.getX());
         boolean ret = true;
         if (diffX < 0) {
