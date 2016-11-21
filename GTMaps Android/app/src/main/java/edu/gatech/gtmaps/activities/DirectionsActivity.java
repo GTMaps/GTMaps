@@ -32,9 +32,6 @@ import static edu.gatech.gtmaps.SearchObject.find;
 public class DirectionsActivity extends AppCompatActivity {
     public String room_message;
     public String building_message;
-    public String[] directions;
-    public TextView instruction;
-    public int ins_num = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,25 +52,6 @@ public class DirectionsActivity extends AppCompatActivity {
 
 //        drawDirections(iv, d.getIntrinsicWidth() - 1, d.getIntrinsicHeight() - 1);
 //        drawDirections(iv, someRoom);
-
-        directions = get_directions(null,null);
-        instruction = (TextView) findViewById(R.id.instructions);
-        instruction.setText(directions[ins_num - 1]);
-
-    }
-
-    private void next_ins(View view) {
-        if (ins_num < directions.length) {
-            ins_num++;
-            instruction.setText(directions[ins_num - 1]);
-        }
-    }
-
-    private void prev_ins(View view) {
-        if (ins_num > 1) {
-            ins_num--;
-            instruction.setText(directions[ins_num - 1]);
-        }
     }
 
     private void drawDirections(ImageView iv, Room target, BuildingSpace entrance) {
@@ -85,15 +63,6 @@ public class DirectionsActivity extends AppCompatActivity {
         }
     }
 
-
-    public String[] get_directions(Room dest, BuildingSpace start) {
-        LinkedList<BuildingSpace> rooms = SearchObject.find(dest,start);
-        String directions = SearchObject.translate(rooms, dest);
-        String[] directions_parsed = directions.split("./n");
-        return directions_parsed;
-
-
-    }
     private void drawDirection(ImageView iv, Hallway hallway) {
         // TODO: update floorplan corresponding to the current floor
         Bitmap floorplan = BitmapFactory.decodeResource(getResources(), R.drawable.ccbfloor);

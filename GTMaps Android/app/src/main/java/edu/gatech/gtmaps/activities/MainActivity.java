@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void showPopup(View v) {
-       /* PopupMenu popup = new PopupMenu(this, v);
+        PopupMenu popup = new PopupMenu(this, v);
         MenuInflater inflater = popup.getMenuInflater();
         inflater.inflate(R.menu.actions, popup.getMenu());
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
-        popup.show();*/
+        popup.show();
     }
     public void hideKeyboard(View view) {
         InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
