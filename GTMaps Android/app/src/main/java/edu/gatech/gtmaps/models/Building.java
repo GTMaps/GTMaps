@@ -34,6 +34,8 @@ public class Building {
         this.name = building_name;
     }
 
+    public String getId() {return this.building_id;}
+
     //TODO return R.drawable resource id instead of image_url
     public void setBuildingImage(String image_url){
         this.image_url = image_url;

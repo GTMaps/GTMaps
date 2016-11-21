@@ -2,7 +2,7 @@ College of Computing:
     - id: 0
     - url: coc.jpg
     - floor_1:
-        - url: ccbfloor.png
+        - url: ccbfloor
         - hallway_1:
             - id: 0
             - end1_x: 0
@@ -797,8 +797,8 @@ College of Computing:
 
 Klaus:
     - id: 1
-    - url: klaus.jpg
+    - url: klaus
 
 Student Center:
     - id: 2
-    - url: student_center.jpg
+    - url: student_center

@@ -6,10 +6,12 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.drawable.Drawable;
 
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -609,7 +611,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
-    public String getBuildingUrl(String building_id) {
+    public int getBuildingUrl(String building_id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
         /* Select rooms query */
@@ -620,10 +622,21 @@ public class DBHelper extends SQLiteOpenHelper {
         Cursor cursor =  db.rawQuery(query, null);
         cursor.moveToFirst();
         String url = cursor.getString(0);
+        int id = getResId(url, Drawable.class);
         cursor.close();
-        return url;
+        return id;
     }
 
+    public static int getResId(String resName, Class<?> c) {
+
+        try {
+            Field idField = c.getDeclaredField(resName);
+            return idField.getInt(idField);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
     public String getFloorUrl(String building_id, String floor_id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
