@@ -34,16 +34,8 @@
             android:layout_gravity="center_horizontal"
             android:textSize="30dp"
             android:layout_below="@+id/building_text"
-            android:layout_centerHorizontal="true" />
-
-        <TextView
-            android:text="Take a left at the end of the hall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/textView3"
-            android:layout_marginTop="61dp"
-            android:layout_below="@+id/ivfloorplan"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:fontFamily="sans-serif" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -76,6 +68,40 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/right_arrow"
+            android:layout_marginTop="31dp"
+            android:id="@+id/next_arrow"
+            android:backgroundTint="#00000000"
+            android:onClick="next_ins"
+            android:layout_below="@+id/ivfloorplan"
+            android:layout_alignLeft="@+id/imageButton3"
+            android:layout_alignStart="@+id/imageButton3" />
+
+        <TextView
+            android:text="Take a left at the end of the hall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/instructions"
+            android:layout_marginTop="13dp"
+            android:layout_alignTop="@+id/prev_arrow"
+            android:layout_centerHorizontal="true" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/left_arrow"
+            android:id="@+id/prev_arrow"
+            android:layout_marginRight="15dp"
+            android:layout_marginEnd="15dp"
+            android:backgroundTint="#00000000"
+            android:onClick="prev_ins"
+            android:layout_alignTop="@+id/next_arrow"
+            android:layout_toLeftOf="@+id/instructions"
+            android:layout_toStartOf="@+id/instructions" />
 
 
     </RelativeLayout>
