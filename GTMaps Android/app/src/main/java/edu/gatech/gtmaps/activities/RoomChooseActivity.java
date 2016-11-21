@@ -17,9 +17,12 @@ import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
+import edu.gatech.gtmaps.DBHelper;
 import edu.gatech.gtmaps.R;
+import edu.gatech.gtmaps.models.Building;
 
 public class RoomChooseActivity extends AppCompatActivity {
 public String message;
@@ -68,6 +71,11 @@ public String message;
     private static final String[] ROOMS = new String[]{
             "301", "302", "303", "017"
     };
+
+    private Building find_building(String name) {
+      //  ArrayList<Building> listOfBuildings = DBHelper.getAllBuildings();
+        return null;
+    }
 
     public void roomSearch(View view) {
         Intent intent = new Intent(this, DirectionsActivity.class);
