@@ -16,6 +16,7 @@
         </activity>
         <activity android:name=".activities.RoomChooseActivity"></activity>
         <activity android:name=".activities.DirectionsActivity"></activity>
+        <activity android:name=".activities.SeeGalleryActivity"></activity>
     </application>
 
 </manifest>

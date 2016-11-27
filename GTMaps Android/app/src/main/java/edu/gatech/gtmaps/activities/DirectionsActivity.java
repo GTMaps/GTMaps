@@ -50,15 +50,15 @@ public class DirectionsActivity extends AppCompatActivity {
         text2.setText(building_message);
 
         ImageView iv = (ImageView)findViewById(R.id.ivfloorplan);
-
+        iv.setBackgroundResource(R.drawable.ccbfloor);
 //        Drawable d = getResources().getDrawable(R.drawable.ccbfloor, getTheme());
 
 //        drawDirections(iv, d.getIntrinsicWidth() - 1, d.getIntrinsicHeight() - 1);
 //        drawDirections(iv, someRoom);
 
-        directions = get_directions(null,null);
+        //directions = get_directions(null,null);
         instruction = (TextView) findViewById(R.id.instructions);
-        instruction.setText(directions[ins_num - 1]);
+        //instruction.setText(directions[ins_num - 1]);
 
     }
 

@@ -18,21 +18,28 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.BaseAdapter;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import edu.gatech.gtmaps.DBHelper;
 import edu.gatech.gtmaps.R;
+import edu.gatech.gtmaps.models.Building;
 
 public class SeeGalleryActivity extends AppCompatActivity{
     public String message;
+    public DBHelper db = new DBHelper(this);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.room_choose);
+        setContentView(R.layout.see_gallery);
         Intent intent = getIntent();
+        GridView gridView = (GridView) findViewById(R.id.gallerygrid);
+        gridView.setAdapter(new GridAdapter(this));
+
 /*
         message = intent.getStringExtra("building");
         TextView text = (TextView) findViewById(R.id.building_text);
@@ -122,7 +129,10 @@ public class SeeGalleryActivity extends AppCompatActivity{
 
         public GridAdapter(Context context) {
             inflater = LayoutInflater.from(context);
-
+            ArrayList<Building> buildings = db.getAllBuildings();
+            for (int i = 0; i < buildings.size(); i++) {
+                items.add(new GridItem(buildings.get(i).getName(), db.getBuildingUrl(buildings.get(i).getId())));
+            }
         }
         @Override
        public int getCount() {
