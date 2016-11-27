@@ -90,6 +90,13 @@ public class Point {
         Point p = (Point) o;
         return p.x == x && p.y == y;
     }
+
+    public int hashCode() {
+        int hash = 1;
+        hash = hash * 17 + (int) x;
+        hash = hash * 31 + (int) y;
+        return hash;
+    }
     // measure
     public double d(Point P, Point Q) {
         return Math.sqrt(d2(P, Q));

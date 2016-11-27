@@ -2,6 +2,8 @@ package edu.gatech.gtmaps.models;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
 import edu.gatech.gtmaps.DBHelper;
 
 public class Building {
@@ -47,7 +49,7 @@ public class Building {
         return dbHelper.getBuildingEntrances(building_id);
     }
 
-    public List<Room> getRooms() {
+    public Map<String, Room> getRooms() {
         return dbHelper.getRoomsPerBuilding(building_id);
     }
 

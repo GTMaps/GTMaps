@@ -71,6 +71,14 @@ public class Hallway implements BuildingSpace{
         this.floor_id = floor_id;
     }
 
+    public void setEnd1(Point end1) {
+        this.end1 = end1;
+    }
+
+    public void setEnd2(Point end2) {
+        this.end2 = end2;
+    }
+
     public void setLength(Double length){
         this.length = length;
     }

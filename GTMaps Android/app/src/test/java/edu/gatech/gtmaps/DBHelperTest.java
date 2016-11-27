@@ -8,6 +8,7 @@ import org.robolectric.RuntimeEnvironment;
 import org.robolectric.Shadows;
 import org.robolectric.shadows.ShadowApplication;
 import java.util.ArrayList;
+import java.util.Map;
 
 import edu.gatech.gtmaps.models.BuildingSpace;
 import edu.gatech.gtmaps.models.Point;
@@ -41,10 +42,10 @@ public class DBHelperTest {
         assertTrue(dbHelper.insertRoom("room_2", "112", "building_0", "floor_1", "hallway_1", "SIDE_B", 2, 3, 5, 1));
         assertTrue(dbHelper.insertRoom("room_3", "112", "building_0", "floor_1", "hallway_1", "SIDE_B", 2, 3, 5, 2)); // Same room different door
 
-        ArrayList<Room> actualRoomsOnFloor1 = dbHelper.getRoomsPerFloor("building_0", "floor_2");
+        Map<String, Room> actualRoomsOnFloor1 = dbHelper.getRoomsPerFloor("building_0", "floor_2");
 
         assertEquals(2, actualRoomsOnFloor1.size());
-        for (Room r : actualRoomsOnFloor1) {
+        for (Room r : actualRoomsOnFloor1.values()) {
             if (r.getRoomId().equals("room_0")) {
                 assertRoomsEqual(
                         new Room("building_0", "floor_2", "hallway_0", BuildingSpace.HallwaySide.SIDE_A, "room_0", "211", new Point(0, 0), new Point(1, 1)), r);
@@ -57,9 +58,9 @@ public class DBHelperTest {
             }
         }
 
-        ArrayList<Room> actualRoomsOnFloor2 = dbHelper.getRoomsPerFloor("building_0", "floor_1");
+        Map<String, Room> actualRoomsOnFloor2 = dbHelper.getRoomsPerFloor("building_0", "floor_1");
         assertEquals(2, actualRoomsOnFloor2.size());
-        for (Room r : actualRoomsOnFloor2) {
+        for (Room r : actualRoomsOnFloor2.values()) {
             if (r.getRoomId().equals("room_2")) {
                 assertRoomsEqual(
                         new Room("building_0", "floor_1", "hallway_1", BuildingSpace.HallwaySide.SIDE_B, "room_2", "112", new Point(2, 3), new Point(5, 1)), r
@@ -87,10 +88,10 @@ public class DBHelperTest {
         assertTrue(dbHelper.insertRoom("room_2", "112", "building_0", "floor_1", "hallway_1", "SIDE_B", 2, 3, 5, 1));
         assertTrue(dbHelper.insertRoom("room_3", "112", "building_0", "floor_1", "hallway_1", "SIDE_B", 2, 3, 5, 2)); // Same room different door
 
-        ArrayList<Room> actual = dbHelper.getRoomsPerBuilding("building_0");
+        Map<String, Room> actual = dbHelper.getRoomsPerBuilding("building_0");
 
         assertEquals(4, actual.size());
-        for (Room r : actual) {
+        for (Room r : actual.values()) {
             if (r.getRoomId().equals("room_0")) {
                 assertRoomsEqual(
                         new Room("building_0", "floor_2", "hallway_0", BuildingSpace.HallwaySide.SIDE_A, "room_0", "211", new Point(0, 0), new Point(1, 1)), r);
@@ -119,8 +120,9 @@ public class DBHelperTest {
 
         dbHelper.populateData();
         assertEquals(3, dbHelper.getAllBuildings().size());
-        assertEquals(9, dbHelper.getHallwaysPerFloor("0", "floor_1").size());
+        assertEquals(17, dbHelper.getHallwaysPerBuilding("0").size());
         assertEquals(80, dbHelper.getRoomsPerBuilding("0").size());
+        assertEquals(22, dbHelper.getJunctionsPerBuilding("0").size());
 
         ArrayList<String> actual = new ArrayList<>();
         actual.add("coc.jpg");
@@ -128,7 +130,7 @@ public class DBHelperTest {
         actual.add("student_center.jpg");
         assertEquals(actual, dbHelper.getAllBuildingUrls());
 
-        assertEquals("ccbfloor.png", dbHelper.getFloorUrl("0", "floor_1"));
+        assertEquals("ccbfloor.png", dbHelper.getFloorUrl("0", "floor 1"));
     }
 
     private void assertRoomsEqual(Room expected, Room actual) {
