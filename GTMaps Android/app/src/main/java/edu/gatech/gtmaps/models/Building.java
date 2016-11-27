@@ -51,7 +51,7 @@ public class Building {
         return dbHelper.getBuildingEntrances(building_id);
     }
 
-    public Map<String, Room> getRooms() {
+    public List<Room> getRooms() {
         return dbHelper.getRoomsPerBuilding(building_id);
     }
 

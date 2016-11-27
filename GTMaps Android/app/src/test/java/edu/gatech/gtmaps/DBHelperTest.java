@@ -8,6 +8,7 @@ import org.robolectric.RuntimeEnvironment;
 import org.robolectric.Shadows;
 import org.robolectric.shadows.ShadowApplication;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import edu.gatech.gtmaps.models.BuildingSpace;
@@ -42,10 +43,10 @@ public class DBHelperTest {
         assertTrue(dbHelper.insertRoom("room_2", "112", "building_0", "floor_1", "hallway_1", "SIDE_B", 2, 3, 5, 1));
         assertTrue(dbHelper.insertRoom("room_3", "112", "building_0", "floor_1", "hallway_1", "SIDE_B", 2, 3, 5, 2)); // Same room different door
 
-        Map<String, Room> actualRoomsOnFloor1 = dbHelper.getRoomsPerFloor("building_0", "floor_2");
+        List<Room> actualRoomsOnFloor1 = dbHelper.getRoomsPerFloor("building_0", "floor_2");
 
         assertEquals(2, actualRoomsOnFloor1.size());
-        for (Room r : actualRoomsOnFloor1.values()) {
+        for (Room r : actualRoomsOnFloor1) {
             if (r.getRoomId().equals("room_0")) {
                 assertRoomsEqual(
                         new Room("building_0", "floor_2", "hallway_0", BuildingSpace.HallwaySide.SIDE_A, "room_0", "211", new Point(0, 0), new Point(1, 1)), r);
@@ -58,9 +59,9 @@ public class DBHelperTest {
             }
         }
 
-        Map<String, Room> actualRoomsOnFloor2 = dbHelper.getRoomsPerFloor("building_0", "floor_1");
+        List<Room> actualRoomsOnFloor2 = dbHelper.getRoomsPerFloor("building_0", "floor_1");
         assertEquals(2, actualRoomsOnFloor2.size());
-        for (Room r : actualRoomsOnFloor2.values()) {
+        for (Room r : actualRoomsOnFloor2) {
             if (r.getRoomId().equals("room_2")) {
                 assertRoomsEqual(
                         new Room("building_0", "floor_1", "hallway_1", BuildingSpace.HallwaySide.SIDE_B, "room_2", "112", new Point(2, 3), new Point(5, 1)), r
@@ -88,10 +89,10 @@ public class DBHelperTest {
         assertTrue(dbHelper.insertRoom("room_2", "112", "building_0", "floor_1", "hallway_1", "SIDE_B", 2, 3, 5, 1));
         assertTrue(dbHelper.insertRoom("room_3", "112", "building_0", "floor_1", "hallway_1", "SIDE_B", 2, 3, 5, 2)); // Same room different door
 
-        Map<String, Room> actual = dbHelper.getRoomsPerBuilding("building_0");
+        List<Room> actual = dbHelper.getRoomsPerBuilding("building_0");
 
         assertEquals(4, actual.size());
-        for (Room r : actual.values()) {
+        for (Room r : actual) {
             if (r.getRoomId().equals("room_0")) {
                 assertRoomsEqual(
                         new Room("building_0", "floor_2", "hallway_0", BuildingSpace.HallwaySide.SIDE_A, "room_0", "211", new Point(0, 0), new Point(1, 1)), r);

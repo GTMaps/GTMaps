@@ -448,43 +448,43 @@ public class DBHelper extends SQLiteOpenHelper {
     /***************************  SQL Select Queries (DB "Getters") *******************************/
 
 //    /* If no parameters provided, mock out response - Temporary patch */
-//    public Map<String, Building> mockAllBuildings(){
+//    public List<Building> mockAllBuildings(){
 //        this.insertBuilding("building_0","College of Computing", "coc.jpg");
 //        this.insertBuilding("building_1","Klaus Advanced Computing Building","klaus.jpg");
 //        this.insertBuilding("building_2","Student Center", "student_center.jpg");
 //
-//        Map<String, Building> buildings = getAllBuildings();
+//        List<Building> buildings = getAllBuildings();
 //
 //        return buildings;
 //    }
 //
 //    /* run this after mocking buildingss */
-//    public Map<String, Hallway> mockHallwaysPerFloor(){
+//    public List<Hallway> mockHallwaysPerFloor(){
 //        this.insertHallway("hallway_0","entrance1","building_0","floor_0");
 //        this.insertHallway("hallway_1","hallway1","building_0","floor_0");
 //        this.insertHallway("hallway_2","entrance2","building_0","floor_0");
 //
-//        Map<String, Hallway> hallways = getHallwaysPerFloor("building_0","floor_0");
+//        List<Hallway> hallways = getHallwaysPerFloor("building_0","floor_0");
 //        return hallways;
 //    }
 //
 //    /* If no parameters provided, mock out response - Temporary patch */
 //    /* run this after mocking buildings */
-//    public Map<String, Room> mockRoomsPerFloor(){
+//    public List<Room> mockRoomsPerFloor(){
 //        this.insertRoom("room_0", "211", "building_0", "floor_2", "hallway_0", "SIDE_A", 0, 0, 1, 1);
 //        this.insertRoom("room_1", "212", "building_0", "floor_2", "hallway_0", "SIDE_B", 2, 4, 5, 6);
 //        this.insertRoom("room_2", "112", "building_0", "floor_1", "hallway_1", "SIDE_B", 2, 3, 5, 1);
 //        this.insertRoom("room_3", "112", "building_0", "floor_1", "hallway_1", "SIDE_B", 2, 3, 5, 2);
 //
-//        Map<String, Room> rooms = getRoomsPerFloor("building_0","floor_1");
+//        List<Room> rooms = getRoomsPerFloor("building_0","floor_1");
 //        /* should return room_2 and room_3 */
 //        return rooms;
 //    }
 
     /* returns a list of all buildings in the DB */
-    public Map<String, Building> getAllBuildings(){
+    public List<Building> getAllBuildings(){
         SQLiteDatabase db = this.getReadableDatabase();
-        Map<String, Building> building_map = new HashMap<>();
+        List<Building> building_list = new ArrayList<>();
 
         /* Select buildings query */
         String buildings_query = "SELECT * FROM " + BUILDINGS_TABLE_NAME;
@@ -498,18 +498,16 @@ public class DBHelper extends SQLiteOpenHelper {
         {
             Building building = new Building();
 
-            String id = cursor.getString(cursor.getColumnIndex(BUILDINGS_ID));
-            /* TODO: consider making a column enum to decrease chance of human error*/
-            building.setBuildingId(id);
+            building.setBuildingId(cursor.getString(cursor.getColumnIndex(BUILDINGS_ID)));
             building.setBuildingName(cursor.getString(cursor.getColumnIndex(BUILDINGS_NAME)));
             building.setBuildingImage(cursor.getString(cursor.getColumnIndex(BUILDINGS_URL)));
 
-            building_map.put(id, building);
+            building_list.add(building);
             cursor.moveToNext();
         }
 
         cursor.close();
-        return building_map;
+        return building_list;
     }
 
     /* Should return all hallways in a building which are marked as entrance */
@@ -527,15 +525,11 @@ public class DBHelper extends SQLiteOpenHelper {
         Cursor cursor =  db.rawQuery(entrances_query, null);
         cursor.moveToFirst();
 
-        //Cursor c = db.rawQuery("Select count()* from " + ROOMS_TABLE_NAME, null);
-        //c.moveToFirst();
-
         /* Map columns to POJO object */
         while (!cursor.isAfterLast())
         {
             Hallway entrance = new Hallway();
 
-            /* TODO: consider making a column enum to decrease chance of human error*/
             entrance.setBuildingId(cursor.getString(0));
             entrance.setFloorId(cursor.getString(1));
             entrance.setHallwayId(cursor.getString(2));
@@ -552,7 +546,12 @@ public class DBHelper extends SQLiteOpenHelper {
     public List<Junction> getJunctionsPerBuilding(String building_id) {
         ArrayList<Junction> junction_list = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Map<String, Hallway> hallways = getHallwaysPerBuilding(building_id);
+        List<Hallway> hallways = getHallwaysPerBuilding(building_id);
+
+        Map<String, Hallway> idToHallways = new HashMap<>();
+        for (Hallway h : hallways) {
+            idToHallways.put(h.getId(), h);
+        }
 
         String query = "SELECT *" +
                 " FROM " + JUNCTIONS_TABLE_NAME +
@@ -567,33 +566,17 @@ public class DBHelper extends SQLiteOpenHelper {
             Point point = new Point(parseFloat(cursor.getString(cursor.getColumnIndex(JUNCTIONS_COORDINATE_X))),
                     parseFloat(cursor.getString(cursor.getColumnIndex(JUNCTIONS_COORDINATE_Y))));
             List<Hallway> members = new ArrayList<>(2);
-            members.add(hallways.get(h_uid1));
-            members.add(hallways.get(h_uid2));
+
+            Hallway hallway1 = idToHallways.get(h_uid1);
+            Hallway hallway2 = idToHallways.get(h_uid2);
+            members.add(hallway1);
+            members.add(hallway2);
 
             Junction junction = new Junction(members, point);
             junction_list.add(junction);
+            hallway1.addJunction(junction);
+            hallway2.addJunction(junction);
             cursor.moveToNext();
-//            Room room = new Room();
-//
-//            /* TODO: consider making a column enum to decrease chance of human error*/
-//            room.setBuildingId(cursor.getString(0));
-//            room.setFloorId(cursor.getString(1));
-//            room.setRoomId(cursor.getString(2));
-//            room.setRoomName(cursor.getString(3));
-//            room.setHallwayId(cursor.getString(4));
-//            room.setHallwaySide((HallwaySide.valueOf(cursor.getString(5))));
-//
-//            Float center_x = parseFloat(cursor.getString(6));
-//            Float center_y = parseFloat(cursor.getString(7));
-//            Point center = new Point(center_x,center_y);
-//            room.setCenter(center);
-//
-//            Float door_x = parseFloat(cursor.getString(8));
-//            Float door_y = parseFloat(cursor.getString(9));
-//            Point door = new Point(door_x,door_y);
-//            room.setDoor(door);
-//
-//            room_list.add(room);
         }
 
         cursor.close();
@@ -601,9 +584,9 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     /* Returns all the rooms on a particular building's floor */
-    public Map<String, Room> getRoomsPerFloor(String building_id, String floor_id)
+    public List<Room> getRoomsPerFloor(String building_id, String floor_id)
     {
-        Map<String, Room> room_map = new HashMap<>();
+        List<Room> room_list = new ArrayList<>();
         String room_query = "";
 
         SQLiteDatabase db = this.getReadableDatabase();
@@ -627,9 +610,7 @@ public class DBHelper extends SQLiteOpenHelper {
         {
             Room room = new Room();
 
-            String id = cursor.getString(cursor.getColumnIndex(ROOMS_ROOM_ID));
-            /* TODO: consider making a column enum to decrease chance of human error*/
-            room.setRoomId(id);
+            room.setRoomId(cursor.getString(cursor.getColumnIndex(ROOMS_ROOM_ID)));
             room.setBuildingId(cursor.getString(cursor.getColumnIndex(ROOMS_BUILDING_ID)));
             room.setFloorId(cursor.getString(cursor.getColumnIndex(ROOMS_FLOOR_ID)));
             room.setRoomName(cursor.getString(cursor.getColumnIndex(ROOMS_ROOM_NAME)));
@@ -646,17 +627,16 @@ public class DBHelper extends SQLiteOpenHelper {
             Point door = new Point(door_x,door_y);
             room.setDoor(door);
 
-            room_map.put(id, room);
+            room_list.add(room);
             cursor.moveToNext();
         }
 
         cursor.close();
-        return room_map;
+        return room_list;
     }
 
-    public Map<String, Hallway> getHallwaysPerFloor(String building_id, String floor_id) {
-//        Map<String, Room> room_map = getRoomsPerFloor(building_id, floor_id);
-        Map<String, Hallway> hallway_map = new HashMap<>();
+    public List<Hallway> getHallwaysPerFloor(String building_id, String floor_id) {
+        List<Hallway> hallway_list = new ArrayList<>();
         String hallway_query = "";
 
         SQLiteDatabase db = this.getReadableDatabase();
@@ -675,11 +655,26 @@ public class DBHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(hallway_query, null);
         cursor.moveToFirst();
 
+        Map<String, List<Room>> hallwayNSideToRoom = new HashMap<>();
+        List<Room> rooms = getRoomsPerBuilding(building_id);
+        for (Room room : rooms) {
+            String key = room.getHallwayId() + room.getHallwaySide();
+            List<Room> roomsOnSide;
+            if (hallwayNSideToRoom.containsKey(key)) {
+                roomsOnSide = hallwayNSideToRoom.get(key);
+            } else {
+                roomsOnSide = new ArrayList<>();
+            }
+            roomsOnSide.add(room);
+
+            hallwayNSideToRoom.put(key, roomsOnSide);
+        }
+
         /* Map columns to POJO object */
         while (!cursor.isAfterLast()) {
             Hallway hallway = new Hallway();
-            String id = cursor.getString(cursor.getColumnIndex(HALLWAYS_HALLWAY_ID));
-            hallway.setHallwayId(id);
+
+            hallway.setHallwayId(cursor.getString(cursor.getColumnIndex(HALLWAYS_HALLWAY_ID)));
             hallway.setBuildingId(cursor.getString(cursor.getColumnIndex(HALLWAYS_BUILDING_ID)));
             hallway.setFloorId(cursor.getString(cursor.getColumnIndex(HALLWAYS_FLOOR_ID)));
             hallway.setHallwayName(cursor.getString(cursor.getColumnIndex(HALLWAYS_HALLWAY_NAME)));
@@ -688,30 +683,24 @@ public class DBHelper extends SQLiteOpenHelper {
             hallway.setEnd2(new Point(parseFloat(cursor.getString(cursor.getColumnIndex(HALLWAYS_END2_X))),
                     parseFloat(cursor.getString(cursor.getColumnIndex(HALLWAYS_END2_Y)))));
 
-        /* TODO: consider making a column enum to decrease chance of human error*/
+            hallway.setRoomsA(hallwayNSideToRoom.get(hallway.getId()+HallwaySide.SIDE_A));
+            hallway.setRoomsB(hallwayNSideToRoom.get(hallway.getId()+HallwaySide.SIDE_B));
 
-            /* TODO: implement */
-//            hallway.setRoomsA();
-//            hallway.setRoomsB();
-
-            //hallway.setLength();
-            //hallway.setWidth();
-
-            hallway_map.put(id, hallway);
+            hallway_list.add(hallway);
             cursor.moveToNext();
         }
 
         cursor.close();
 
-        return hallway_map;
+        return hallway_list;
     }
 
     /* Returns all the rooms in a particular building */
-    public Map<String, Room> getRoomsPerBuilding(String building_id) {
+    public List<Room> getRoomsPerBuilding(String building_id) {
         return getRoomsPerFloor(building_id, null);
     }
 
-    public Map<String, Hallway> getHallwaysPerBuilding(String building_id) {
+    public List<Hallway> getHallwaysPerBuilding(String building_id) {
         return getHallwaysPerFloor(building_id, null);
     }
 
@@ -733,7 +722,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
         cursor.close();
         return urls;
-
     }
 
     public int getBuildingUrl(String building_id) {

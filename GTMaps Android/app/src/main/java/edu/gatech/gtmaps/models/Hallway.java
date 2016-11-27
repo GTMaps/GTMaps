@@ -43,7 +43,7 @@ public class Hallway implements BuildingSpace{
         this.roomsB = null;
         this.length = 0;
         this.width = 0;
-        this.junctions = null;
+        this.junctions = new LinkedList<>();
         this.end1 = null;
         this.end2 = null;
     }
@@ -87,24 +87,12 @@ public class Hallway implements BuildingSpace{
         this.width = width;
     }
 
-    public void setRoomsA(){
-        //sql call to get rooms A and assign it
+    public void setRoomsA(List<Room> rooms){
+        this.roomsA = rooms;
     }
 
-    public void setRoomsB(){
-        //sql call to get rooms B and assign it
-    }
-
-    public void setJunctions(){
-        //sql call to set junctions
-    }
-
-    public void end1(){
-        //sql call to get end1
-    }
-
-    public void end2(){
-        //sql call to get end2
+    public void setRoomsB(List<Room> rooms){
+        this.roomsB = rooms;
     }
 
     /* getters */
@@ -114,7 +102,6 @@ public class Hallway implements BuildingSpace{
 
     public String getId() { return id;}
 
-    //TODO: add sql queries to initially poll for RoomsA and RoomsB from DB
     public List<Room> getRoomsA() { return roomsA; }
 
     public List<Room> getRoomsB() { return roomsB; }

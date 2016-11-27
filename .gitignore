@@ -55,3 +55,8 @@ fabric.properties
 
 #gitignore included by vleblanc3
 */.idea/*
+CoordinateFinder/data/roomPts
+
+CoordinateFinder/data/pts
+
+CoordinateFinder/data/pic.jpg
