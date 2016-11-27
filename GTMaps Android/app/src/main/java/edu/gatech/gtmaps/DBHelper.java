@@ -656,7 +656,7 @@ public class DBHelper extends SQLiteOpenHelper {
         cursor.moveToFirst();
 
         Map<String, List<Room>> hallwayNSideToRoom = new HashMap<>();
-        List<Room> rooms = getRoomsPerBuilding(building_id);
+        List<Room> rooms = getRoomsPerFloor(building_id, floor_id);
         for (Room room : rooms) {
             String key = room.getHallwayId() + room.getHallwaySide();
             List<Room> roomsOnSide;
