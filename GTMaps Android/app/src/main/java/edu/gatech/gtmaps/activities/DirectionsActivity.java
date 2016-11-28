@@ -20,6 +20,7 @@ import android.widget.TextView;
 import java.util.Arrays;
 import java.util.LinkedList;
 
+import edu.gatech.gtmaps.DBHelper;
 import edu.gatech.gtmaps.R;
 import edu.gatech.gtmaps.SearchObject;
 import edu.gatech.gtmaps.models.Building;
@@ -40,6 +41,8 @@ public class DirectionsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.directions);
         Intent intent = getIntent();
+        DBHelper db = new DBHelper(this);
+        db.populateData();
 
         room_message = intent.getStringExtra("room");
         TextView text = (TextView) findViewById(R.id.room_text);
@@ -48,6 +51,24 @@ public class DirectionsActivity extends AppCompatActivity {
         building_message = intent.getStringExtra("building");
         TextView text2 = (TextView) findViewById(R.id.building_text);
         text2.setText(building_message);
+        String building_id = "-1";
+        for (int i = 0; i < db.getAllBuildings().size(); i++) {
+            if (db.getAllBuildings().get(i).getName().equalsIgnoreCase(building_message)) {
+                building_id = db.getAllBuildings().get(i).getId();
+                break;
+            }
+        }
+
+        Hallway entrance = db.getBuildingEntrances(building_id).get(0);
+        Room destination = null;
+        for (int i = 0; i < db.getRoomsPerBuilding(building_id).size(); i++) {
+            if (db.getRoomsPerBuilding(building_id).get(i).getRoomName().equalsIgnoreCase(room_message)) {
+                destination = db.getRoomsPerBuilding(building_id).get(i);
+                break;
+            }
+        }
+
+
 
         ImageView iv = (ImageView)findViewById(R.id.ivfloorplan);
         iv.setBackgroundResource(R.drawable.ccbfloor);
@@ -55,11 +76,11 @@ public class DirectionsActivity extends AppCompatActivity {
 
 //        drawDirections(iv, d.getIntrinsicWidth() - 1, d.getIntrinsicHeight() - 1);
 //        drawDirections(iv, someRoom);
-
-        //directions = get_directions(null,null);
-        instruction = (TextView) findViewById(R.id.instructions);
-        //instruction.setText(directions[ins_num - 1]);
-
+        if (building_id != "-1" && destination != null) {
+            directions = get_directions(destination, entrance);
+            instruction = (TextView) findViewById(R.id.instructions);
+            instruction.setText(directions[ins_num - 1]);
+        }
     }
 
     private void next_ins(View view) {

@@ -23,7 +23,6 @@ import edu.gatech.gtmaps.DBHelper;
 import edu.gatech.gtmaps.R;
 
 public class MainActivity extends AppCompatActivity {
-    DBHelper db = new DBHelper(this);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
         });
         ImageView iv = (ImageView)findViewById(R.id.logoiv);
         iv.setImageResource(R.drawable.gtmaps);
-        db.populateData();
 
     }
 

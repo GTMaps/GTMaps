@@ -19,22 +19,44 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import edu.gatech.gtmaps.DBHelper;
 import edu.gatech.gtmaps.R;
 import edu.gatech.gtmaps.models.Building;
+import edu.gatech.gtmaps.models.Room;
 
 public class RoomChooseActivity extends AppCompatActivity {
 public String message;
+    private static String[] ROOMS;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.room_choose);
         Intent intent = getIntent();
+        DBHelper db = new DBHelper(this);
+        db.populateData();
+
+        String building_id = "-1";
+
 
         message = intent.getStringExtra("building");
         TextView text = (TextView) findViewById(R.id.building_text);
         text.setText(message);
+
+        for (int i = 0; i < db.getAllBuildings().size(); i++) {
+            if (db.getAllBuildings().get(i).getName().equalsIgnoreCase(message)) {
+                building_id = db.getAllBuildings().get(i).getId();
+                break;
+            }
+        }
+
+        List<Room> list_of_rooms = db.getRoomsPerBuilding(building_id);
+        ROOMS = new String[list_of_rooms.size()];
+        for (int i = 0; i < list_of_rooms.size(); i++) {
+            ROOMS[i] = list_of_rooms.get(i).getRoomName();
+        }
+
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_dropdown_item_1line, ROOMS);
@@ -68,9 +90,7 @@ public String message;
         iv.setImageResource(R.drawable.coc);
     }
 
-    private static final String[] ROOMS = new String[]{
-            "301", "302", "303", "017"
-    };
+
 
     private Building find_building(String name) {
       //  ArrayList<Building> listOfBuildings = DBHelper.getAllBuildings();
