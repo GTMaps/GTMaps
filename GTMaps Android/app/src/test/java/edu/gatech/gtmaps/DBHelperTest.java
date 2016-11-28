@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import edu.gatech.gtmaps.models.BuildingSpace;
+import edu.gatech.gtmaps.models.Hallway;
 import edu.gatech.gtmaps.models.Point;
 import edu.gatech.gtmaps.models.Room;
 
@@ -121,9 +122,9 @@ public class DBHelperTest {
 
         dbHelper.populateData();
         assertEquals(3, dbHelper.getAllBuildings().size());
-        assertEquals(17, dbHelper.getHallwaysPerBuilding("0").size());
+        assertEquals(18, dbHelper.getHallwaysPerBuilding("0").size());
         assertEquals(80, dbHelper.getRoomsPerBuilding("0").size());
-        assertEquals(22, dbHelper.getJunctionsPerBuilding("0").size());
+        assertEquals(24, dbHelper.getJunctionsPerBuilding("0").size());
 
         ArrayList<String> actual = new ArrayList<>();
         actual.add("coc.jpg");
@@ -132,6 +133,13 @@ public class DBHelperTest {
         assertEquals(actual, dbHelper.getAllBuildingUrls());
 
         assertEquals("ccbfloor.png", dbHelper.getFloorUrl("0", "floor 1"));
+
+        List<Hallway> entrances = dbHelper.getBuildingEntrances("0");
+        assertEquals(1, entrances.size());
+        Hallway entrance = entrances.get(0);
+        Point point = new Point(586, 281);
+        assertEquals(point, entrance.getEnd1());
+        assertEquals(point, entrance.getEnd2());
     }
 
     private void assertRoomsEqual(Room expected, Room actual) {

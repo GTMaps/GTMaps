@@ -209,7 +209,16 @@ public class DBHelper extends SQLiteOpenHelper {
             List<Map> buildingAttributes = buildingEntry.getValue();
             insertBuilding(buildingId, buildingName, (String) buildingAttributes.get(0).get("url"));
 
-            List<Double> entrance = (List) buildingAttributes.get(1).get("entrance");
+            List<Double> entrance = buildingAttributes.get(1).get("entrance") != null ?
+                    (List) ((List) buildingAttributes.get(1).get("entrance")).get(0) : null;
+            String entranceId = null;
+            if (entrance != null) {
+                entranceId = nextId(HALLWAYS_TABLE_NAME);
+                insertHallway(entranceId, buildingId + "_entrance", buildingId, "floor 1",
+                        entrance.get(0).floatValue(), entrance.get(1).floatValue(),
+                        entrance.get(0).floatValue(), entrance.get(1).floatValue(), 0, 0);
+            }
+
             List<Map> floors = (List) buildingAttributes.get(2).get("floors");
 
             if (floors == null) {
@@ -217,6 +226,10 @@ public class DBHelper extends SQLiteOpenHelper {
             }
 
             Map<Point, List<String>> junctionMap = new HashMap<>();
+            List<String> list = new ArrayList<>();
+            list.add(entranceId);
+            junctionMap.put(new Point(entrance.get(0).floatValue(), entrance.get(1).floatValue()), list);
+
             for (Map<String, List> floor : floors) {
                 for (Map.Entry<String, List> floorEntry : floor.entrySet()) {
                     String floorId = floorEntry.getKey();
@@ -520,7 +533,7 @@ public class DBHelper extends SQLiteOpenHelper {
         /* Select buildings query */
         String entrances_query = "SELECT * FROM " + HALLWAYS_TABLE_NAME +
                                 " WHERE " + HALLWAYS_HALLWAY_NAME + " LIKE '%entrance%'"
-                                + " AND " + BUILDINGS_ID + " equals '" + building_id + "'";
+                                + " AND " + HALLWAYS_BUILDING_ID + "='" + building_id + "'";
 
         /* Create DB cursor to iterate over query results */
         Cursor cursor =  db.rawQuery(entrances_query, null);
@@ -531,10 +544,14 @@ public class DBHelper extends SQLiteOpenHelper {
         {
             Hallway entrance = new Hallway();
 
-            entrance.setBuildingId(cursor.getString(0));
-            entrance.setFloorId(cursor.getString(1));
-            entrance.setHallwayId(cursor.getString(2));
-            entrance.setHallwayName(cursor.getString(3));
+            entrance.setHallwayId(cursor.getString(cursor.getColumnIndex(HALLWAYS_HALLWAY_ID)));
+            entrance.setBuildingId(cursor.getString(cursor.getColumnIndex(HALLWAYS_BUILDING_ID)));
+            entrance.setFloorId(cursor.getString(cursor.getColumnIndex(HALLWAYS_FLOOR_ID)));
+            entrance.setHallwayName(cursor.getString(cursor.getColumnIndex(HALLWAYS_HALLWAY_NAME)));
+            entrance.setEnd1(new Point(parseFloat(cursor.getString(cursor.getColumnIndex(HALLWAYS_END1_X))),
+                    parseFloat(cursor.getString(cursor.getColumnIndex(HALLWAYS_END1_Y)))));
+            entrance.setEnd2(new Point(parseFloat(cursor.getString(cursor.getColumnIndex(HALLWAYS_END2_X))),
+                    parseFloat(cursor.getString(cursor.getColumnIndex(HALLWAYS_END2_Y)))));
 
             entrance_list.add(entrance);
             cursor.moveToNext();

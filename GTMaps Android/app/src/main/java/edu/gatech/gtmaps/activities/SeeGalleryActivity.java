@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import edu.gatech.gtmaps.DBHelper;
 import edu.gatech.gtmaps.R;
@@ -129,7 +130,7 @@ public class SeeGalleryActivity extends AppCompatActivity{
 
         public GridAdapter(Context context) {
             inflater = LayoutInflater.from(context);
-            ArrayList<Building> buildings = db.getAllBuildings();
+            List<Building> buildings = db.getAllBuildings();
             for (int i = 0; i < buildings.size(); i++) {
                 String url = db.getBuildingUrl(buildings.get(i).getId());
                 items.add(new GridItem(buildings.get(i).getName(), getResources().getIdentifier(url, "drawable", getPackageName())));

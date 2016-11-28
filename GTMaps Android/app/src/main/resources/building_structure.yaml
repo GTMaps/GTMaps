@@ -1,7 +1,7 @@
 College of Computing:
     - url: coc.jpg
     - entrance:
-        - [587.0,281.0]
+        - [586.0,281.0]
     - floors:
         - floor 1:
             - url: ccbfloor.png
