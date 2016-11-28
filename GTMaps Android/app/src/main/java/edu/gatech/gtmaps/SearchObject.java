@@ -91,11 +91,11 @@ public class SearchObject {
                 String direction = (isLeftTurn(thisHall.getEnd1(),thisHall.getEnd2(),nextHall.getEnd1(),nextHall.getEnd2())) ? "left" : "right";
                 sb.append("Turn ");
                 sb.append(direction);
-                sb.append(" at end of hallway ");
-                sb.append(thisHall.getName());
-                sb.append(" onto ");
-                sb.append(nextHall.getName());
-                sb.append(".\n");
+                sb.append(" at end of this hallway.\n");
+                //sb.append(thisHall.getName());
+                //sb.append(" onto ");
+                //sb.append(nextHall.getName());
+                //sb.append(".\n");
             }
             thisHall = nextHall;
             halls.add(thisHall);
@@ -104,11 +104,11 @@ public class SearchObject {
         Hallway penultimate = halls.get(halls.size() - 2);
         sb.append("Room ");
         sb.append(goalRoom.getRoomName());
-        sb.append(" will be on this hallway (");
-        sb.append(lastHall.getName());
+        sb.append(" will be on this hallway ");
+        //sb.append(lastHall.getName());
 
         String hall_side = (isLeftRoom(lastHall.getEnd1(), lastHall.getEnd2(), penultimate.getEnd1(), penultimate.getEnd2(),goalRoom.getDoor())) ? "left" : "right";
-        sb.append(") on the ");
+        sb.append("on the ");
         sb.append(hall_side);
         sb.append(" of the hall.\n");
         return sb.toString();
