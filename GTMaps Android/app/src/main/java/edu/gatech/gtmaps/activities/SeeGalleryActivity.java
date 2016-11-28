@@ -131,7 +131,8 @@ public class SeeGalleryActivity extends AppCompatActivity{
             inflater = LayoutInflater.from(context);
             ArrayList<Building> buildings = db.getAllBuildings();
             for (int i = 0; i < buildings.size(); i++) {
-                items.add(new GridItem(buildings.get(i).getName(), db.getBuildingUrl(buildings.get(i).getId())));
+                String url = db.getBuildingUrl(buildings.get(i).getId());
+                items.add(new GridItem(buildings.get(i).getName(), getResources().getIdentifier(url, "drawable", getPackageName())));
             }
         }
         @Override

@@ -2,6 +2,7 @@ package edu.gatech.gtmaps;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
@@ -724,7 +725,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return urls;
     }
 
-    public int getBuildingUrl(String building_id) {
+    public String getBuildingUrl(String building_id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
         /* Select rooms query */
@@ -735,9 +736,8 @@ public class DBHelper extends SQLiteOpenHelper {
         Cursor cursor =  db.rawQuery(query, null);
         cursor.moveToFirst();
         String url = cursor.getString(0);
-        int id = getResId(url, Drawable.class);
         cursor.close();
-        return id;
+        return url;
     }
 
     public static int getResId(String resName, Class<?> c) {
