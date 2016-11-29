@@ -552,6 +552,8 @@ public class DBHelper extends SQLiteOpenHelper {
                     parseFloat(cursor.getString(cursor.getColumnIndex(HALLWAYS_END1_Y)))));
             entrance.setEnd2(new Point(parseFloat(cursor.getString(cursor.getColumnIndex(HALLWAYS_END2_X))),
                     parseFloat(cursor.getString(cursor.getColumnIndex(HALLWAYS_END2_Y)))));
+            entrance.setRoomsA(new ArrayList<Room>());
+            entrance.setRoomsB(new ArrayList<Room>());
 
             entrance_list.add(entrance);
             cursor.moveToNext();
@@ -701,8 +703,10 @@ public class DBHelper extends SQLiteOpenHelper {
             hallway.setEnd2(new Point(parseFloat(cursor.getString(cursor.getColumnIndex(HALLWAYS_END2_X))),
                     parseFloat(cursor.getString(cursor.getColumnIndex(HALLWAYS_END2_Y)))));
 
-            hallway.setRoomsA(hallwayNSideToRoom.get(hallway.getId()+HallwaySide.SIDE_A));
-            hallway.setRoomsB(hallwayNSideToRoom.get(hallway.getId()+HallwaySide.SIDE_B));
+            List<Room> roomsA = hallwayNSideToRoom.get(hallway.getId()+HallwaySide.SIDE_A);
+            List<Room> roomsB = hallwayNSideToRoom.get(hallway.getId()+HallwaySide.SIDE_B);
+            hallway.setRoomsA(roomsA == null ? new ArrayList<Room>() : roomsA);
+            hallway.setRoomsB(roomsB == null ? new ArrayList<Room>() : roomsB);
 
             hallway_list.add(hallway);
             cursor.moveToNext();

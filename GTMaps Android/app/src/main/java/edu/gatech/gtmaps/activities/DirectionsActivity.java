@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
 
 import edu.gatech.gtmaps.DBHelper;
 import edu.gatech.gtmaps.R;
@@ -26,6 +27,7 @@ import edu.gatech.gtmaps.SearchObject;
 import edu.gatech.gtmaps.models.Building;
 import edu.gatech.gtmaps.models.BuildingSpace;
 import edu.gatech.gtmaps.models.Hallway;
+import edu.gatech.gtmaps.models.Junction;
 import edu.gatech.gtmaps.models.Room;
 
 import static edu.gatech.gtmaps.SearchObject.find;
@@ -59,13 +61,23 @@ public class DirectionsActivity extends AppCompatActivity {
             }
         }
 
-        Hallway entrance = db.getBuildingEntrances(building_id).get(0);
+//        Hallway entrance = db.getBuildingEntrances(building_id).get(0);
         Room destination = null;
         for (int i = 0; i < db.getRoomsPerBuilding(building_id).size(); i++) {
             if (db.getRoomsPerBuilding(building_id).get(i).getRoomName().equalsIgnoreCase(room_message)) {
                 destination = db.getRoomsPerBuilding(building_id).get(i);
                 break;
             }
+        }
+        Hallway entrance = null;
+        List<Junction> junctions = db.getJunctionsPerBuilding(building_id);
+        for (Junction j : junctions) {
+            for (Hallway h : j.getHallways()) {
+                if (h.getName().contains("entrance"));
+                entrance = h;
+                break;
+            }
+            break;
         }
 
 

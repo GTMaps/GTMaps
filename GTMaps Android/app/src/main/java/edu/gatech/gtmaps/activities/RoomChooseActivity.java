@@ -101,7 +101,7 @@ public String message;
         Intent intent = new Intent(this, DirectionsActivity.class);
         TextView text = (TextView) findViewById(R.id.room_choice);
         if (Arrays.asList(ROOMS).contains(text.getText().toString())) {
-            String new_message = " Room " + text.getText().toString();
+            String new_message = text.getText().toString();
             intent.putExtra("room", new_message);
             intent.putExtra("building", message);
         }
