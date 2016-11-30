@@ -348,6 +348,8 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + ROOMS_TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + HALLWAYS_TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + JUNCTIONS_TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + FLOORS_TABLE_NAME);
+
 
         onCreate(db);
     }
@@ -562,6 +564,7 @@ public class DBHelper extends SQLiteOpenHelper {
         cursor.close();
         return entrance_list;
     }
+
 
     public List<Junction> getJunctionsPerBuilding(String building_id) {
         ArrayList<Junction> junction_list = new ArrayList<>();

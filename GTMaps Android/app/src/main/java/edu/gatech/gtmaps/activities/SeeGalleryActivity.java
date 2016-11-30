@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.PopupMenu;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -22,6 +24,11 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.Thing;
+import com.google.android.gms.common.api.GoogleApiClient;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -30,9 +37,11 @@ import edu.gatech.gtmaps.DBHelper;
 import edu.gatech.gtmaps.R;
 import edu.gatech.gtmaps.models.Building;
 
-public class SeeGalleryActivity extends AppCompatActivity{
+public class SeeGalleryActivity extends AppCompatActivity {
     public String message;
     public DBHelper db = new DBHelper(this);
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,26 +85,15 @@ public class SeeGalleryActivity extends AppCompatActivity{
         });
         ImageView iv = (ImageView)findViewById(R.id.ivbuilding);
         iv.setImageResource(R.drawable.coc);*/
+
     }
 
-    private static final String[] ROOMS = new String[]{
-            "301", "302", "303", "017"
-    };
 
-    public void roomSearch(View view) {
-        Intent intent = new Intent(this, DirectionsActivity.class);
-        TextView text = (TextView) findViewById(R.id.room_choice);
-        if (Arrays.asList(ROOMS).contains(text.getText().toString())) {
-            String new_message = " Room " + text.getText().toString();
-            intent.putExtra("room", new_message);
-            intent.putExtra("building", message);
-        }
-        startActivity(intent);
-    }
     public void home(View view) {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
+
     public void showPopup(View v) {
         PopupMenu popup = new PopupMenu(this, v);
         MenuInflater inflater = popup.getMenuInflater();
@@ -110,7 +108,7 @@ public class SeeGalleryActivity extends AppCompatActivity{
                     intent1 = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent1);
                     return true;
-                } else if(item.getItemId() == R.id.choose_room) {
+                } else if (item.getItemId() == R.id.choose_room) {
                     intent1 = new Intent(getApplicationContext(), RoomChooseActivity.class);
                     String message = getIntent().getStringExtra("building");
                     intent1.putExtra("building", message);
@@ -123,6 +121,10 @@ public class SeeGalleryActivity extends AppCompatActivity{
         popup.show();
     }
 
+
+
+
+
     private final class GridAdapter extends BaseAdapter {
         private final ArrayList<GridItem> items = new ArrayList<>();
         private final LayoutInflater inflater;
@@ -131,19 +133,22 @@ public class SeeGalleryActivity extends AppCompatActivity{
         public GridAdapter(Context context) {
             inflater = LayoutInflater.from(context);
             List<Building> buildings = db.getAllBuildings();
-            for (int i = 0; i < buildings.size(); i++) {
+            for (int i = 0; i < 3; i++) {
                 String url = db.getBuildingUrl(buildings.get(i).getId());
                 items.add(new GridItem(buildings.get(i).getName(), getResources().getIdentifier(url, "drawable", getPackageName())));
             }
         }
+
         @Override
-       public int getCount() {
+        public int getCount() {
             return items.size();
         }
+
         @Override
         public GridItem getItem(int i) {
             return items.get(i);
         }
+
         @Override
         public long getItemId(int i) {
             return items.get(i).drawableId;
@@ -186,7 +191,7 @@ public class SeeGalleryActivity extends AppCompatActivity{
     }
 
     public void hideKeyboard(View view) {
-        InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }

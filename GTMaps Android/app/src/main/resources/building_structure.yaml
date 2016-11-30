@@ -1,5 +1,5 @@
 College of Computing:
-    - url: coc.jpg
+    - url: coc
     - entrance:
         - [586.0,281.0]
     - floors:
@@ -659,11 +659,11 @@ College of Computing:
                     - side b:
 
 Klaus:
-    - url: klaus.jpg
+    - url: klaus
     - entrances:
     - floors:
 
 Student Center:
-    - url: student_center.jpg
+    - url: student_center
     - entrances:
     - floors:

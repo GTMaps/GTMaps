@@ -25,6 +25,10 @@ import edu.gatech.gtmaps.R;
 public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        DBHelper db = new DBHelper(this);
+        if (db.getAllBuildings().size() == 0) {
+            db.populateData();
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 

@@ -69,26 +69,14 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
 
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/right_arrow"
-            android:layout_marginTop="31dp"
-            android:id="@+id/next_arrow"
-            android:backgroundTint="#00000000"
-            android:onClick="next_ins"
-            android:layout_below="@+id/ivfloorplan"
-            android:layout_alignLeft="@+id/imageButton3"
-            android:layout_alignStart="@+id/imageButton3" />
-
         <TextView
-            android:text="Take a left at the end of the hall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/instructions"
-            android:layout_marginTop="13dp"
-            android:layout_alignTop="@+id/prev_arrow"
-            android:layout_centerHorizontal="true" />
+            android:layout_above="@+id/prev_arrow"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="16dp"
+            android:layout_centerInParent="true" />
 
         <ImageButton
             android:layout_width="wrap_content"
@@ -96,12 +84,23 @@
             app:srcCompat="@drawable/left_arrow"
             android:id="@+id/prev_arrow"
             android:layout_marginRight="15dp"
-            android:layout_marginEnd="15dp"
             android:backgroundTint="#00000000"
             android:onClick="prev_ins"
             android:layout_alignTop="@+id/next_arrow"
-            android:layout_toLeftOf="@+id/instructions"
-            android:layout_toStartOf="@+id/instructions" />
+            android:layout_alignStart="@+id/instructions"
+            android:layout_marginStart="14dp" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/right_arrow"
+            android:id="@+id/next_arrow"
+            android:backgroundTint="#00000000"
+            android:onClick="next_ins"
+            android:layout_marginBottom="18dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignEnd="@+id/instructions"
+            android:layout_marginEnd="12dp" />
 
 
     </RelativeLayout>

@@ -12,7 +12,6 @@
         android:clickable="true"
         android:focusableInTouchMode="true"
         android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
 
 
@@ -95,7 +94,8 @@
             android:layout_alignBottom="@+id/button2"
             android:layout_alignRight="@+id/room_choice"
             android:layout_alignEnd="@+id/room_choice"
-            android:id="@+id/room_list" />
+            android:id="@+id/room_list"
+            android:onClick="see_list" />
 
     </RelativeLayout>
 </RelativeLayout>

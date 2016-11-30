@@ -44,7 +44,7 @@ public class DirectionsActivity extends AppCompatActivity {
         setContentView(R.layout.directions);
         Intent intent = getIntent();
         DBHelper db = new DBHelper(this);
-        db.populateData();
+
 
         room_message = intent.getStringExtra("room");
         TextView text = (TextView) findViewById(R.id.room_text);
@@ -95,14 +95,14 @@ public class DirectionsActivity extends AppCompatActivity {
         }
     }
 
-    private void next_ins(View view) {
+    public void next_ins(View view) {
         if (ins_num < directions.length) {
             ins_num++;
             instruction.setText(directions[ins_num - 1]);
         }
     }
 
-    private void prev_ins(View view) {
+    public void prev_ins(View view) {
         if (ins_num > 1) {
             ins_num--;
             instruction.setText(directions[ins_num - 1]);
@@ -122,7 +122,7 @@ public class DirectionsActivity extends AppCompatActivity {
     public String[] get_directions(Room dest, BuildingSpace start) {
         LinkedList<BuildingSpace> rooms = SearchObject.find(dest,start);
         String directions = SearchObject.translate(rooms, dest);
-        String[] directions_parsed = directions.split("./n");
+        String[] directions_parsed = directions.split(".\n");
         return directions_parsed;
 
 

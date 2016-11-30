@@ -35,7 +35,6 @@ public String message;
         setContentView(R.layout.room_choose);
         Intent intent = getIntent();
         DBHelper db = new DBHelper(this);
-        db.populateData();
 
         String building_id = "-1";
 
@@ -138,6 +137,11 @@ public String message;
         popup.show();
     }
 
+    public void see_list(View view) {
+        Intent intent = new Intent(this, RoomListActivity.class);
+        intent.putExtra("building", message);
+        startActivity(intent);
+    }
 
     public void hideKeyboard(View view) {
         InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
