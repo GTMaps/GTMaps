@@ -87,7 +87,7 @@ public class SearchObject {
 
             Point thisEnd = thisHall.getEnd1();
             Point nextEnd = nextHall.getEnd1();
-            if (!(thisEnd.getX() == nextEnd.getX() || thisEnd.getY() == nextEnd.getY())) {
+            if (!thisEnd.equals(nextEnd)) {
                 String direction = (isLeftTurn(thisHall.getEnd1(),thisHall.getEnd2(),nextHall.getEnd1(),nextHall.getEnd2())) ? "left" : "right";
                 sb.append("Turn ");
                 sb.append(direction);
