@@ -97,9 +97,9 @@ public class SearchObject {
 
                 direction_number+=1;
                 sb.append(direction_number);
-                sb.append(".");
+                sb.append(". ");
 
-                sb.append(" Turn ");
+                sb.append("Turn ");
                 sb.append(direction);
                 if (thisHall.getRoomsA().size() < 1 || thisHall.getRoomsB().size() < 1) {
                     sb.append(" down the hall at the next junction.\n");
@@ -121,8 +121,8 @@ public class SearchObject {
         }
         Hallway lastHall = halls.getLast();
         Hallway penultimate = halls.get(halls.size() - 2);
-        //sb.append(dir.size());
-        sb.append(" Room ");
+
+        sb.append("Room ");
         sb.append(goalRoom.getRoomName());
         sb.append(" will be on this hallway ");
         //sb.append(lastHall.getName());

@@ -74,9 +74,14 @@
             android:layout_height="wrap_content"
             android:id="@+id/instructions"
             android:layout_above="@+id/prev_arrow"
+            android:layout_gravity="center"
             android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
             android:layout_marginBottom="16dp"
-            android:layout_centerInParent="true" />
+            android:layout_centerInParent="true"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            />
 
         <ImageButton
             android:layout_width="wrap_content"
