@@ -83,7 +83,7 @@ public class DirectionsActivity extends AppCompatActivity {
 
 
         ImageView iv = (ImageView)findViewById(R.id.ivfloorplan);
-        iv.setBackgroundResource(R.drawable.ccbfloor);
+        iv.setImageDrawable( getResources().getDrawable(R.drawable.ccbfloor));
 //        Drawable d = getResources().getDrawable(R.drawable.ccbfloor, getTheme());
 
 //        drawDirections(iv, d.getIntrinsicWidth() - 1, d.getIntrinsicHeight() - 1);
