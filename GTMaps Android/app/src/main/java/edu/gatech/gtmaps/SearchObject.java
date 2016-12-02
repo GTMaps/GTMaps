@@ -39,7 +39,7 @@ public class SearchObject {
                 List<Hallway> hallways = j.getHallways();
                 for (int i = 0; i < hallways.size(); i++) {
                     if (!hallways.get(i).getName().equals(currNode.h.getId())) {
-                        frontier.push(new Node(hallways.get(i), currNode, j));
+                        frontier.addLast(new Node(hallways.get(i), currNode, j));
                     }
                 }
             }
@@ -88,7 +88,7 @@ public class SearchObject {
 
             Point thisEnd = thisHall.getEnd1();
 //            Point nextEnd = nextHall.getEnd1();
-            if (!thisHall.getEnd1().equals(nextHall.getEnd2()) && !thisHall.getEnd2().equals(nextHall.getEnd1())) {
+            if (!oneHall(thisHall,nextHall)) {
                 String direction = (isLeftTurn(thisHall.getEnd1(),thisHall.getEnd2(),nextHall.getEnd1(),nextHall.getEnd2())) ? "left" : "right";
                 sb.append("Turn ");
                 sb.append(direction);
@@ -137,7 +137,7 @@ public class SearchObject {
     //let a, b belong to thishall and c,d belong to nexthall
     public static boolean isLeftTurn(Point a, Point b, Point c, Point d) {
         Point[] p = connectingPoints(a,b,c,d);
-        Point connectingP1 =p[1], connectingP2 = p[0];
+        Point connectingP1 =p[0], connectingP2 = p[1];
 //        double ac = a.d(a,c);
 //        double ad = a.d(a,d);
 //        double bc = b.d(b,c);
@@ -163,7 +163,7 @@ public class SearchObject {
         Point endP2 = (connectingP2==d) ? c:d;
         Vec thisHallVec = new Vec(startingP1, connectingP1);
         Vec nextHallVec = new Vec(connectingP2,endP2);
-        return nextHallVec.isLeftTurn(thisHallVec);
+        return !nextHallVec.isLeftTurn(thisHallVec);
     }
 
     /**
@@ -212,7 +212,7 @@ public class SearchObject {
             int roomXhallX = (int) (roomDoor.getX() - entrySide.getX());
             ret = (diffY < 0) ? (roomXhallX > 0) : (roomXhallX < 0);
         }
-        return ret;
+        return !ret;
     }
 
     /**
@@ -247,5 +247,12 @@ public class SearchObject {
         }
         Point[] ret = {connectingP1, connectingP2};
         return ret;
+    }
+
+    private static boolean oneHall(Hallway h1, Hallway h2) {
+        Point[] p = connectingPoints(h1.getEnd1(), h1.getEnd2(), h2.getEnd1(), h2.getEnd2());
+        Point opposite1 = (h1.getEnd1().equals(p[0])) ? h1.getEnd2() : h1.getEnd1();
+        Point opposite2 = (h2.getEnd1().equals(p[1])) ? h2.getEnd2() : h2.getEnd1();
+        return (opposite1.getX() == opposite2.getX() || opposite1.getY() == opposite2.getY());
     }
 }
