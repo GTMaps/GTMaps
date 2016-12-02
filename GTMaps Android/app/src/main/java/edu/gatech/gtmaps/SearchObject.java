@@ -78,6 +78,9 @@ public class SearchObject {
         Hallway thisHall = (Hallway) dir.get(0);
         Hallway nextHall = (Hallway) dir.get(0);
         halls.add(thisHall);
+
+        int direction_number = 0;
+
         for (int i = 1; i < dir.size(); i++) {
             BuildingSpace node = dir.get(i);
             for (Hallway h : ((Junction) node).getHallways()) {
@@ -88,12 +91,18 @@ public class SearchObject {
 
             Point thisEnd = thisHall.getEnd1();
 //            Point nextEnd = nextHall.getEnd1();
+
             if (!oneHall(thisHall,nextHall)) {
                 String direction = (isLeftTurn(thisHall.getEnd1(),thisHall.getEnd2(),nextHall.getEnd1(),nextHall.getEnd2())) ? "left" : "right";
-                sb.append("Turn ");
+
+                direction_number+=1;
+                sb.append(direction_number);
+                sb.append(".");
+
+                sb.append(" Turn ");
                 sb.append(direction);
                 if (thisHall.getRoomsA().size() < 1 || thisHall.getRoomsB().size() < 1) {
-                    sb.append(" at end of this hallway.\n");
+                    sb.append(" down the hall at the next junction.\n");
                 } else {
                     sb.append(" after room ");
                     Point p = connectingPoints(thisHall.getEnd1(), thisHall.getEnd2(), nextHall.getEnd1(), nextHall.getEnd2())[0];
@@ -112,7 +121,8 @@ public class SearchObject {
         }
         Hallway lastHall = halls.getLast();
         Hallway penultimate = halls.get(halls.size() - 2);
-        sb.append("Room ");
+        //sb.append(dir.size());
+        sb.append(" Room ");
         sb.append(goalRoom.getRoomName());
         sb.append(" will be on this hallway ");
         //sb.append(lastHall.getName());
