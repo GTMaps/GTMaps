@@ -233,7 +233,7 @@ public class SearchObject {
         if(ad < min) {
             min = ad;
             connectingP1 = a;
-            connectingP2 = c;
+            connectingP2 = d;
         }
         if(bc < min) {
             min = bc;
