@@ -37,9 +37,9 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        //Below works with the drop down list when you start typing
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_dropdown_item_1line, BUILDINGS);
+                android.R.layout.simple_dropdown_item_1line, BUILDINGS); //populates the list with the BUILDIGNS array
         AutoCompleteTextView textView = (AutoCompleteTextView)
                 findViewById(R.id.Building_Choice);
         textView.setAdapter(adapter);
@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
 
     }
-    private static final String[] BUILDINGS = new String[] {
+    private static final String[] BUILDINGS = new String[] { //A test array for populating the auto-fill
             "College of Computing", "Howey","CULC", "Van Leer"
     };
 
@@ -82,32 +82,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void showPopup(View v) {
-       /* PopupMenu popup = new PopupMenu(this, v);
-        MenuInflater inflater = popup.getMenuInflater();
-        inflater.inflate(R.menu.actions, popup.getMenu());
-        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
 
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                Intent intent1;
-
-                if (item.getItemId() == R.id.go_to_building) {
-                    intent1 = new Intent(getApplicationContext(), MainActivity.class);
-                    startActivity(intent1);
-                    return true;
-                } else if(item.getItemId() == R.id.choose_room) {
-                    intent1 = new Intent(getApplicationContext(), RoomChooseActivity.class);
-                    String message = getIntent().getStringExtra("building");
-                    intent1.putExtra("building", message);
-                    startActivity(intent1);
-                    return true;
-                }
-                return false;
-            }
-        });
-        popup.show();*/
-    }
     public void hideKeyboard(View view) {
         InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);

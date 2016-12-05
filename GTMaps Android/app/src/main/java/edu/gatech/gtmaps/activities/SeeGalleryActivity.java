@@ -44,47 +44,12 @@ public class SeeGalleryActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //not fully implemented. Shows pictures available in database at the moment.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.see_gallery);
         Intent intent = getIntent();
         GridView gridView = (GridView) findViewById(R.id.gallerygrid);
         gridView.setAdapter(new GridAdapter(this));
-
-/*
-        message = intent.getStringExtra("building");
-        TextView text = (TextView) findViewById(R.id.building_text);
-        text.setText(message);
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_dropdown_item_1line, ROOMS);
-        AutoCompleteTextView textView = (AutoCompleteTextView)
-                findViewById(R.id.room_choice);
-        textView.setAdapter(adapter);
-        textView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-                InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                in.hideSoftInputFromWindow(arg1.getApplicationWindowToken(), 0);
-            }
-        });
-
-        textView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-                InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                in.hideSoftInputFromWindow(arg1.getApplicationWindowToken(), 0);
-            }
-        });
-        textView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    hideKeyboard(v);
-                }
-            }
-        });
-        ImageView iv = (ImageView)findViewById(R.id.ivbuilding);
-        iv.setImageResource(R.drawable.coc);*/
 
     }
 
@@ -95,6 +60,7 @@ public class SeeGalleryActivity extends AppCompatActivity {
     }
 
     public void showPopup(View v) {
+        //functionality for "choose another room" is taken out because it doesn't make sense for this activity.
         PopupMenu popup = new PopupMenu(this, v);
         MenuInflater inflater = popup.getMenuInflater();
         inflater.inflate(R.menu.actions, popup.getMenu());
@@ -108,13 +74,13 @@ public class SeeGalleryActivity extends AppCompatActivity {
                     intent1 = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent1);
                     return true;
-                } else if (item.getItemId() == R.id.choose_room) {
+                } /*else if (item.getItemId() == R.id.choose_room) {
                     intent1 = new Intent(getApplicationContext(), RoomChooseActivity.class);
                     String message = getIntent().getStringExtra("building");
                     intent1.putExtra("building", message);
                     startActivity(intent1);
                     return true;
-                }
+                }*/
                 return false;
             }
         });
@@ -125,7 +91,7 @@ public class SeeGalleryActivity extends AppCompatActivity {
 
 
 
-    private final class GridAdapter extends BaseAdapter {
+    private final class GridAdapter extends BaseAdapter { //class to try and make pictures in galelry show up in a grid with text. Does not fully work.
         private final ArrayList<GridItem> items = new ArrayList<>();
         private final LayoutInflater inflater;
 
