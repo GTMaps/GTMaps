@@ -40,6 +40,14 @@ public class Point {
         return Math.sqrt(d2(P, Q));
     };                                                  
 
+    /**
+     * measure square distance between point P and Q
+     * @param P Q points
+     * @return double square distance between P,Q
+     */
+    public float d2(Point P, Point Q) {
+        return (Q.x-P.x)*(Q.x-P.x)+(Q.y-P.y)*(Q.y-P.y);
+    }
 
 
 }
