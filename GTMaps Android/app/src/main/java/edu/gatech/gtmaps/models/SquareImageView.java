@@ -5,6 +5,8 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
 
+//Used to ensure images maintain the right aspect ration when shown in the gallery.
+
 public class SquareImageView extends ImageView {
     public SquareImageView(Context context) {
         super(context);

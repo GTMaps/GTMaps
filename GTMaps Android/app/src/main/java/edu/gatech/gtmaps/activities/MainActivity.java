@@ -23,6 +23,11 @@ import edu.gatech.gtmaps.DBHelper;
 import edu.gatech.gtmaps.R;
 
 public class MainActivity extends AppCompatActivity {
+    //A test array for populating the auto-fill
+    private static final String[] BUILDINGS = new String[] {
+            "College of Computing", "Howey","CULC", "Van Leer"
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         DBHelper db = new DBHelper(this);
@@ -62,16 +67,20 @@ public class MainActivity extends AppCompatActivity {
         iv.setImageResource(R.drawable.gtmaps);
 
     }
-
+    /**
+     * Button that will open the gllery activty
+     * @param view
+     */
     public void seeGallery(View view) {
         Intent intent = new Intent(this, SeeGalleryActivity.class);
         startActivity(intent);
-
     }
-    private static final String[] BUILDINGS = new String[] { //A test array for populating the auto-fill
-            "College of Computing", "Howey","CULC", "Van Leer"
-    };
 
+
+    /**
+     * Button that will pass in the building choice if found in the buildings array
+     * @param view
+     */
     public void findBuilding(View view) {
         Intent intent = new Intent(this, RoomChooseActivity.class);
         TextView text = (TextView) findViewById(R.id.Building_Choice);
@@ -82,7 +91,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
+    /**
+     * Hides the keyboard if tapped outside of the keyboard or if enter is pressed
+     * @param view
+     */
     public void hideKeyboard(View view) {
         InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);

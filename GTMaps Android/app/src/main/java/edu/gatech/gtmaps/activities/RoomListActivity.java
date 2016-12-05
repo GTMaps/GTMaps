@@ -48,6 +48,14 @@ public class RoomListActivity extends AppCompatActivity implements AdapterView.O
 
     }
 
+    /**
+     * A listener for selecting an item from the room list.
+     * Checks the position and grabs the text out of it to send to the directions activity.
+     * @param l
+     * @param v
+     * @param position
+     * @param id
+     */
     public void onItemClick(AdapterView<?> l, View v, int position, long id) {
         //finds the item clicked and passes its' data into directions.
         String data = (String) l.getItemAtPosition(position);
