@@ -53,12 +53,20 @@ public class SeeGalleryActivity extends AppCompatActivity {
 
     }
 
-
+    /**
+     * Part of the navigation menu that allows the user to return to the home screen
+     * @param view
+     */
     public void home(View view) {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * The nav menu found by clicking the three dots in the top right of the activity.
+     * "Choose another Room" should not work and does nothing when selected.
+     * @param v
+     */
     public void showPopup(View v) {
         //functionality for "choose another room" is taken out because it doesn't make sense for this activity.
         PopupMenu popup = new PopupMenu(this, v);
@@ -88,10 +96,10 @@ public class SeeGalleryActivity extends AppCompatActivity {
     }
 
 
-
-
-
-    private final class GridAdapter extends BaseAdapter { //class to try and make pictures in galelry show up in a grid with text. Does not fully work.
+    /**
+     * Class to display the gallery in a table like format
+     */
+    private final class GridAdapter extends BaseAdapter {
         private final ArrayList<GridItem> items = new ArrayList<>();
         private final LayoutInflater inflater;
 
@@ -105,16 +113,30 @@ public class SeeGalleryActivity extends AppCompatActivity {
             }
         }
 
+        /**
+         * Returns size of items array
+         * @return length of items array
+         */
         @Override
         public int getCount() {
             return items.size();
         }
 
+        /**
+         * Gets item at specific index(i)
+         * @param i
+         * @return
+         */
         @Override
         public GridItem getItem(int i) {
             return items.get(i);
         }
 
+        /**
+         * Gets the item_id at index(i)
+         * @param i
+         * @return
+         */
         @Override
         public long getItemId(int i) {
             return items.get(i).drawableId;
@@ -155,9 +177,9 @@ public class SeeGalleryActivity extends AppCompatActivity {
             }
         }
     }
-
+    /*
     public void hideKeyboard(View view) {
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
-    }
+    }*/
 }

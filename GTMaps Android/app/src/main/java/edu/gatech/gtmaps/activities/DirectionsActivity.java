@@ -54,6 +54,8 @@ public class DirectionsActivity extends AppCompatActivity {
         TextView text2 = (TextView) findViewById(R.id.building_text);
         text2.setText(building_message);
         String building_id = "-1";
+
+        //Looks for the bulding id in the database by comparing the name to the entries
         for (int i = 0; i < db.getAllBuildings().size(); i++) {
             if (db.getAllBuildings().get(i).getName().equalsIgnoreCase(building_message)) {
                 building_id = db.getAllBuildings().get(i).getId();
@@ -63,10 +65,12 @@ public class DirectionsActivity extends AppCompatActivity {
 
 //        Hallway entrance = db.getBuildingEntrances(building_id).get(0);
         Room destination = null;
+
+        //looks for the room object by comparing the names in the database
         for (int i = 0; i < db.getRoomsPerBuilding(building_id).size(); i++) {
             if (db.getRoomsPerBuilding(building_id).get(i).getRoomName().equalsIgnoreCase(room_message)) {
                 destination = db.getRoomsPerBuilding(building_id).get(i);
-                break; //legacy code from when DB would keep populating and we'd need the first entry for a given building. 
+                break; //legacy code from when DB would keep populating and we'd need the first entry for a given building.
             }
         }
         Hallway entrance = null;
@@ -88,6 +92,9 @@ public class DirectionsActivity extends AppCompatActivity {
 
 //        drawDirections(iv, d.getIntrinsicWidth() - 1, d.getIntrinsicHeight() - 1);
 //        drawDirections(iv, someRoom);
+
+        //Sets the text if room is found.(Room should always be found since
+        //room search activity makes sure it's there first.
         if (building_id != "-1" && destination != null) {
             directions = get_directions(destination, entrance);
             instruction = (TextView) findViewById(R.id.instructions);
@@ -95,6 +102,10 @@ public class DirectionsActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Button for moving forward in the directions
+     * @param view
+     */
     public void next_ins(View view) {
         if (ins_num < directions.length) {
             ins_num++;
@@ -102,6 +113,10 @@ public class DirectionsActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Button for moving backward in the directions
+     * @param view
+     */
     public void prev_ins(View view) {
         if (ins_num > 1) {
             ins_num--;
@@ -109,6 +124,12 @@ public class DirectionsActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * (Not fuly implemented) Draws on provided floorplan
+     * @param iv
+     * @param target
+     * @param entrance
+     */
     private void drawDirections(ImageView iv, Room target, BuildingSpace entrance) {
         //"Entrance" parameter should be passed in from the user entrance selection in the gallery
         LinkedList<BuildingSpace> route = SearchObject.find(target, entrance);
@@ -118,7 +139,13 @@ public class DirectionsActivity extends AppCompatActivity {
         }
     }
 
-
+    /**
+     * Helper function for calling the searchObject class.
+     * Also parses the returned string and places it into an array for easy viewing
+     * @param dest
+     * @param start
+     * @return
+     */
     public String[] get_directions(Room dest, BuildingSpace start) {
         LinkedList<BuildingSpace> rooms = SearchObject.find(dest,start);
         String directions = SearchObject.translate(rooms, dest);
@@ -127,6 +154,12 @@ public class DirectionsActivity extends AppCompatActivity {
 
 
     }
+
+    /**
+     * (Not fully implemented) Function for drawing on the floor plan shown
+     * @param iv
+     * @param hallway
+     */
     private void drawDirection(ImageView iv, Hallway hallway) {
         // TODO: update floorplan corresponding to the current floor
         Bitmap floorplan = BitmapFactory.decodeResource(getResources(), R.drawable.ccbfloor);
@@ -146,6 +179,10 @@ public class DirectionsActivity extends AppCompatActivity {
         iv.setImageDrawable(new BitmapDrawable(getResources(), direction));
     }
 
+    /**
+     * Nav menu for traversing to the rest of the app
+     * @param v
+     */
     public void showPopup(View v) {
         PopupMenu popup = new PopupMenu(this, v);
         MenuInflater inflater = popup.getMenuInflater();
@@ -173,6 +210,10 @@ public class DirectionsActivity extends AppCompatActivity {
         popup.show();
     }
 
+    /**
+     * legacy function for returning home when a home button was seperated from the nav menu.
+     * @param view
+     */
     public void home(View view) {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);

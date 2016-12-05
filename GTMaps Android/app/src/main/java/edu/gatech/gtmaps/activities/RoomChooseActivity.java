@@ -89,13 +89,10 @@ public String message;
         iv.setImageResource(R.drawable.coc);
     }
 
-
-
-    private Building find_building(String name) {
-      //  ArrayList<Building> listOfBuildings = DBHelper.getAllBuildings();
-        return null;
-    }
-
+    /**
+     * Passes room and building text into the directions activity
+     * @param view
+     */
     public void roomSearch(View view) {
         Intent intent = new Intent(this, DirectionsActivity.class);
         TextView text = (TextView) findViewById(R.id.room_choice);
@@ -106,10 +103,20 @@ public String message;
         }
         startActivity(intent);
     }
+
+    /**
+     * Function for navigating back to the home menu
+     * @param view
+     */
     public void home(View view) {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
+
+    /**
+     * Nav menu for returning home or to coosing another room
+     * @param v
+     */
     public void showPopup(View v) {
         PopupMenu popup = new PopupMenu(this, v);
         MenuInflater inflater = popup.getMenuInflater();
@@ -137,12 +144,20 @@ public String message;
         popup.show();
     }
 
+    /**
+     * Button for bringing user to see the entire room list.
+     * @param view
+     */
     public void see_list(View view) {
         Intent intent = new Intent(this, RoomListActivity.class);
         intent.putExtra("building", message);
         startActivity(intent);
     }
 
+    /**
+     * Functionality for makind the keyboard disappear when clicking outside the keyboard.
+     * @param view
+     */
     public void hideKeyboard(View view) {
         InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
