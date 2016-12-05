@@ -49,6 +49,7 @@ public class RoomListActivity extends AppCompatActivity implements AdapterView.O
     }
 
     public void onItemClick(AdapterView<?> l, View v, int position, long id) {
+        //finds the item clicked and passes its' data into directions.
         String data = (String) l.getItemAtPosition(position);
         Intent intent = new Intent(this, DirectionsActivity.class);
         intent.putExtra("room", data);

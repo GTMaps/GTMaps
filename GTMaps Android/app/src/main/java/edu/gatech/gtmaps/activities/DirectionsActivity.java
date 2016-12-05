@@ -66,7 +66,7 @@ public class DirectionsActivity extends AppCompatActivity {
         for (int i = 0; i < db.getRoomsPerBuilding(building_id).size(); i++) {
             if (db.getRoomsPerBuilding(building_id).get(i).getRoomName().equalsIgnoreCase(room_message)) {
                 destination = db.getRoomsPerBuilding(building_id).get(i);
-                break;
+                break; //legacy code from when DB would keep populating and we'd need the first entry for a given building. 
             }
         }
         Hallway entrance = null;

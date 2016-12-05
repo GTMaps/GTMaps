@@ -1,8 +1,10 @@
 package edu.gatech.gtmaps;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.PriorityQueue;
 
 import edu.gatech.gtmaps.models.BuildingSpace;
 import edu.gatech.gtmaps.models.Hallway;
@@ -18,7 +20,7 @@ import edu.gatech.gtmaps.models.Room;
 public class SearchObject {
 
     /**
-     * Performs breadth first search (to be adapted to Greedy Best-First) across all the halls/rooms
+     * Performs Greedy Best-First search across all the halls/rooms, prioritizing on hallway length.
      * to find target room.
      * @param target The desired room to navigate to.
      * @param start The starting hallway.
@@ -28,7 +30,26 @@ public class SearchObject {
         //Initialize datastructures/loop variables
         LinkedList<BuildingSpace> ret = new LinkedList<>();
         LinkedList<BuildingSpace> visited = new LinkedList<>();
-        LinkedList<Node> frontier = new LinkedList<>();
+        //LinkedList<Node> frontier = new LinkedList<>();
+        PriorityQueue<Node> frontier = new PriorityQueue<>(11, new Comparator<Node>() {
+            @Override
+            public int compare(Node o1, Node o2) {
+                Hallway h1 = (Hallway) o1.h;
+                Hallway h2 = (Hallway) o2.h;
+                Point h1_end1 = h1.getEnd1();
+                Point h1_end2 = h1.getEnd2();
+                Point h2_end1 = h2.getEnd1();
+                Point h2_end2 = h2.getEnd2();
+                double dist1,dist2;
+                double dx = h1_end1.getX() - h1_end2.getX();
+                double dy = h1_end1.getY() - h1_end2.getY();
+                dist1 = Math.sqrt(Math.pow(dx,2) + Math.pow(dy,2));
+                dx = h2_end1.getX() - h2_end2.getX();
+                dy = h2_end1.getY() - h2_end2.getY();
+                dist2 = Math.sqrt(Math.pow(dx,2) + Math.pow(dy,2));
+                return (int) -(dist1 - dist2);
+            }
+        });
         boolean found = false;
         Node currNode = new Node(start, null, null);
 
@@ -39,15 +60,18 @@ public class SearchObject {
                 List<Hallway> hallways = j.getHallways();
                 for (int i = 0; i < hallways.size(); i++) {
                     if (!hallways.get(i).getName().equals(currNode.h.getId())) {
-                        frontier.addLast(new Node(hallways.get(i), currNode, j));
+                        //frontier.addLast(new Node(hallways.get(i), currNode, j));
+                        frontier.add(new Node(hallways.get(i), currNode, j));
                     }
                 }
             }
 
             if (!frontier.isEmpty()) {
-                Node next = frontier.pop();
+                //Node next = frontier.pop();
+                Node next = frontier.poll();
                 while (visited.contains(next.h) & !frontier.isEmpty()) {
-                    next = frontier.pop();
+                    //next = frontier.pop();
+                    next = frontier.poll();
                 }
                 currNode = next;
             }
@@ -78,6 +102,9 @@ public class SearchObject {
         Hallway thisHall = (Hallway) dir.get(0);
         Hallway nextHall = (Hallway) dir.get(0);
         halls.add(thisHall);
+
+        int direction_number = 0;
+
         for (int i = 1; i < dir.size(); i++) {
             BuildingSpace node = dir.get(i);
             for (Hallway h : ((Junction) node).getHallways()) {
@@ -88,16 +115,28 @@ public class SearchObject {
 
             Point thisEnd = thisHall.getEnd1();
 //            Point nextEnd = nextHall.getEnd1();
+
             if (!oneHall(thisHall,nextHall)) {
                 String direction = (isLeftTurn(thisHall.getEnd1(),thisHall.getEnd2(),nextHall.getEnd1(),nextHall.getEnd2())) ? "left" : "right";
+
+                direction_number+=1;
+                sb.append(direction_number);
+                sb.append(". ");
+
                 sb.append("Turn ");
                 sb.append(direction);
-                if (thisHall.getRoomsA().size() < 1 || thisHall.getRoomsB().size() < 1) {
-                    sb.append(" at end of this hallway.\n");
+                Point p = connectingPoints(thisHall.getEnd1(), thisHall.getEnd2(), nextHall.getEnd1(), nextHall.getEnd2())[0];
+                //(direction.equalsIgnoreCase("left") && p.equals(thisEnd)) || direction.equalsIgnoreCase("right") && !p.equals(thisEnd) ? thisHall.getRoomsA() : thisHall.getRoomsB();
+                List<Room> roomSide;
+                if ((direction.equalsIgnoreCase("left") && p.equals(thisEnd)) || (direction.equalsIgnoreCase("right") && !p.equals(thisEnd))) {
+                    roomSide = (thisHall.getRoomsA().size() > 0) ? thisHall.getRoomsA() : thisHall.getRoomsB();
+                } else {
+                    roomSide = (thisHall.getRoomsB().size() > 0) ? thisHall.getRoomsB() : thisHall.getRoomsA();
+                }
+                if (roomSide.size() < 1) {
+                    sb.append(" down the hall at the next junction.\n");
                 } else {
                     sb.append(" after room ");
-                    Point p = connectingPoints(thisHall.getEnd1(), thisHall.getEnd2(), nextHall.getEnd1(), nextHall.getEnd2())[0];
-                    List<Room> roomSide = (direction.equalsIgnoreCase("left") && p.equals(thisEnd)) || direction.equalsIgnoreCase("right") && !p.equals(thisEnd) ? thisHall.getRoomsA() : thisHall.getRoomsB();
                     Room lastRoom = (p.equals(thisEnd)) ? roomSide.get(0) : roomSide.get(roomSide.size() - 1);
                     sb.append(lastRoom.getRoomName());
                     sb.append(".\n");
@@ -112,6 +151,7 @@ public class SearchObject {
         }
         Hallway lastHall = halls.getLast();
         Hallway penultimate = halls.get(halls.size() - 2);
+
         sb.append("Room ");
         sb.append(goalRoom.getRoomName());
         sb.append(" will be on this hallway ");
@@ -138,26 +178,6 @@ public class SearchObject {
     public static boolean isLeftTurn(Point a, Point b, Point c, Point d) {
         Point[] p = connectingPoints(a,b,c,d);
         Point connectingP1 =p[0], connectingP2 = p[1];
-//        double ac = a.d(a,c);
-//        double ad = a.d(a,d);
-//        double bc = b.d(b,c);
-//        double bd = b.d(b,d);
-//        double min = ac;
-//        if(ad < min) {
-//            min = ad;
-//            connectingP1 = a;
-//            connectingP2 = c;
-//        }
-//        if(bc < min) {
-//            min = bc;
-//            connectingP1 = b;
-//            connectingP2 = c;
-//        }
-//        if(bd < min) {
-//            min = bd;
-//            connectingP1 = b;
-//            connectingP2 = d;
-//        }
 
         Point startingP1 = (connectingP1==b) ? a:b;
         Point endP2 = (connectingP2==d) ? c:d;
@@ -178,26 +198,6 @@ public class SearchObject {
     private static boolean isLeftRoom(Point lasthallEnd1, Point lasthallEnd2, Point prevhallEnd1, Point prevhallEnd2, Point roomDoor) {
         Point[] p = connectingPoints(lasthallEnd1,lasthallEnd2,prevhallEnd1,prevhallEnd2);
         Point entrySide =p[0], otherSide = p[1];
-//        double ac = lasthallEnd1.d(lasthallEnd1,prevhallEnd1);
-//        double ad = lasthallEnd1.d(lasthallEnd1,prevhallEnd2);
-//        double bc = lasthallEnd2.d(lasthallEnd2,prevhallEnd1);
-//        double bd = lasthallEnd2.d(lasthallEnd2,prevhallEnd2);
-//        double min = ac;
-//        if(ad < min) {
-//            min = ad;
-//            entrySide = lasthallEnd1;
-//            otherSide = lasthallEnd2;
-//        }
-//        if(bc < min) {
-//            min = bc;
-//            entrySide = lasthallEnd2;
-//            otherSide = lasthallEnd1;
-//        }
-//        if(bd < min) {
-//            min = bd;
-//            entrySide = lasthallEnd2;
-//            otherSide = lasthallEnd1;
-//        }
 
         int diffX = (int) (entrySide.getX() - otherSide.getX());
         boolean ret = true;
@@ -249,6 +249,12 @@ public class SearchObject {
         return ret;
     }
 
+    /**
+     * Uses dot product to determine which ends of two hallways are closest.
+     * @param h1 The first hallway with ends 1 and 2
+     * @param h2 The second hallway with ends 1 or 2
+     * @return Point[] containing [h1.(end 1 or 2), h2.(end 1 or 2)] depending on which two are closest.
+     */
     private static boolean oneHall(Hallway h1, Hallway h2) {
         Point[] p = connectingPoints(h1.getEnd1(), h1.getEnd2(), h2.getEnd1(), h2.getEnd2());
         Point opposite1 = (h1.getEnd1().equals(p[0])) ? h1.getEnd2() : h1.getEnd1();

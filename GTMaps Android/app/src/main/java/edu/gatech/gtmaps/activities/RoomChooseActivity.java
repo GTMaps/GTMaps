@@ -49,7 +49,7 @@ public String message;
                 break;
             }
         }
-
+        //Drop down list is populated from the database for the specified building.
         List<Room> list_of_rooms = db.getRoomsPerBuilding(building_id);
         ROOMS = new String[list_of_rooms.size()];
         for (int i = 0; i < list_of_rooms.size(); i++) {
