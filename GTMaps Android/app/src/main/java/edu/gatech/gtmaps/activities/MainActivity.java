@@ -29,6 +29,12 @@ public class MainActivity extends AppCompatActivity {
         if (db.getAllBuildings().size() == 0) {
             db.populateData();
         }
+
+        // TO FIX LEGACY DB ISSUES
+        // comment out above if-block and uncomment out below line
+        // to resolve potential db errors from legacy builds
+        ///db.onUpgrade(db.getReadableDatabase(), 0, 1);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
