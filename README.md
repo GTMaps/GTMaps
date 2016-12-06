@@ -2,46 +2,51 @@
 Indoor navigational app for some GT buildings.
 ======
 ## Install Guide
-**Pre-Requisites**
+**Pre-Requisites:**
+
 1. Must have Android Device with Android version 21 (5.0 Lollipop) or later
 2. Android Device must have “Allow unknown sources” enabled under Developer Settings
 
 
-**Dependencies**
+**Dependencies:**
+
 - None required for installation. All necessary dependencies are bundled in the .apk download.
 
 
-**Download**
-- github.com/GTMaps/GTMaps
+**Download:**
+
+- [Download from our Github Repository!](github.com/GTMaps/GTMaps "GT Maps Github Repository")
 
 
-**Build**
+**Build:**
+
 - No compilation or building necessary.  The .apk file is already executable.
 
 
-**Installation**
-*METHOD 1*
+**Installation:**  
+*METHOD 1-*
+
 1. Connect your Android device to your computer using a USB cable
 2. Open a file browser on the computer and copy the GTMaps.apk onto the Android device
 3. Open a file browser on the Android Device and locate the .apk file
 4. Tap on this file to install it
   1. (Optional) Add the GT Maps app to your device’s home screen
 
+*METHOD 2 (Requires Android Studio and source code)-*
 
-*METHOD 2 (Requires Android Studio and source code)*
 1. Pull the source code from our github into your local android development environment.
 2. Connect your phone to your development environment over USB.
-  - Android Studio should automatically download any dependencies to your machine after a “Gradle Sync” is performed.
+ - *Android Studio should automatically download any dependencies to your machine after a “Gradle Sync” is performed.*
 3. Press the “Play” symbol at the top of your workspace and choose your phone as the target device.  Android Studio will build and compile the application into an apk, then automatically download it to your phone and automatically open it.
   1. (Optional) Add the GT Maps app to your device’s home screen
 
-
-**Running Application**
+**Running Application:**
 - Locate the app on the android device either through the All Apps button or on the home screen (if you chose to add it to the screen) and tap the application to open.
 
 ======
 ## Release Notes (v 1.0)
 **New features:**
+
 - Support for first floor College of Computing Building
 - Separate Room List activity provided to select from all possible rooms
 - Separate Gallery View to present supported campus buildings. (Beta)
@@ -56,10 +61,12 @@ Indoor navigational app for some GT buildings.
 
 
 **Bug Fixes:**
+
 - App no longer crashes when viewing gallery
 
 
 **Known Bugs:**
+
 - Clicking a building in gallery view does not forward the building id to the next activity.
 - Gallery navigation menu includes option for “choose another room”, even when not functional.
 - Rare crashes when going to the directions activity from the room search activity
