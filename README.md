@@ -23,18 +23,22 @@ Indoor navigational app for GT buildings.
 
 **Build:**
 
-- No compilation or building necessary.  The .apk file is already executable.
+- ~~No compilation or building necessary.  The .apk file is already executable.~~
+1. Create a new project in Android Studio
+  - Select existing project files, and choose the GT Maps Android folder from the cloned repository
+2. Allow gradle sync to run
+3. Select Run from the Android Studio menu
 
 
 **Installation:**  
 *METHOD 1-* (in progress)
 
-~~1. Connect your Android device to your computer using a USB cable
-2. Open a file browser on the computer and locate the GTMaps.apk in the downloaded zip folder
-3. Copy this .apk onto the Android device
-4. Open a file browser on the Android Device and locate the .apk file
-5. Tap on this file to install it
-  1. (Optional) Add the GT Maps app to your device’s home screen~~
+1. ~~Connect your Android device to your computer using a USB cable~~
+2. ~~Open a file browser on the computer and locate the GTMaps.apk in the downloaded zip folder~~
+3. ~~Copy this .apk onto the Android device~~
+4. ~~Open a file browser on the Android Device and locate the .apk file~~
+5. ~~Tap on this file to install it~~
+  1. ~~(Optional) Add the GT Maps app to your device’s home screen~~
 
 *METHOD 2 (Requires Android Studio and source code)-*
 
